@@ -2,7 +2,12 @@
 
 Alle nennenswerten Änderungen an diesem Projekt werden hier dokumentiert.
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
-die Versionierung an [Semantic Versioning](https://semver.org/lang/de/).
+die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
+(`MAJOR.MINOR.MAINTENANCE` – siehe [CONTRIBUTING.md](CONTRIBUTING.md)).
+
+## [Unreleased]
+
+_Noch keine unveröffentlichten Änderungen._
 
 ## [1.0.1] – 2026-06-21
 

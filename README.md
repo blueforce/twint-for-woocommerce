@@ -75,7 +75,7 @@ Technisch übernimmt das der eingebettete [Plugin Update Checker](https://github
 
 ## Mitwirken
 
-Issues und Pull Requests sind willkommen. Bitte halte dich an den bestehenden Code-Stil (WordPress Coding Standards).
+Issues und Pull Requests sind willkommen. Versionsschema (`MAJOR.MINOR.MAINTENANCE`), Release-Prozess und Changelog-Konvention sind in **[CONTRIBUTING.md](CONTRIBUTING.md)** beschrieben; Code-Stil: WordPress Coding Standards.
 
 ## Lizenz
 
