@@ -1,5 +1,11 @@
 # TWINT for WooCommerce
 
+[![Version](https://img.shields.io/github/v/release/blueforce/twint-for-woocommerce?label=Version)](https://github.com/blueforce/twint-for-woocommerce/releases)
+[![License: GPL v2+](https://img.shields.io/badge/License-GPL%20v2%2B-blue.svg)](LICENSE)
+![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-21759b.svg)
+![WooCommerce](https://img.shields.io/badge/WooCommerce-7.0%2B-96588a.svg)
+![PHP](https://img.shields.io/badge/PHP-7.4%2B-777bb4.svg)
+
 Ein kostenloses, natives WooCommerce-Bezahl-Gateway für **TWINT** – **ohne API, ohne Vertrag mit TWINT und ohne Payment Service Provider**. Entwickelt und bereitgestellt von [Blueforce Digital Solutions](https://blueforce.ch).
 
 > ⚠️ **Wichtig zur Einordnung:** TWINT stellt seine Zahlungs-API **nicht öffentlich** zur Verfügung. Eine echte, automatische TWINT-Integration ist nur über einen TWINT-Acquiring-Vertrag (mit Zertifikat) oder über einen Payment Service Provider (Datatrans, Saferpay, Payrexx, Worldline …) möglich und muss von TWINT zertifiziert werden.
