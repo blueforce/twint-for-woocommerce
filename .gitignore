@@ -9,7 +9,9 @@ Thumbs.db
 
 # Abhängigkeiten / Build
 node_modules/
-vendor/
+# Nur ein vendor/ im Repo-Root ignorieren – NICHT das vendor/ der eingebetteten
+# Update-Bibliothek (includes/plugin-update-checker/vendor/), das mitgeliefert werden muss.
+/vendor/
 *.zip
 
 # Logs

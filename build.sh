@@ -22,10 +22,26 @@ rm -f "$OUT"
 git archive --format=zip --prefix="${SLUG}/" -o "$OUT" "$REF"
 
 echo "Erzeugt: $OUT  (Ref: $REF)"
+
+# Inhaltsliste einmal erzeugen (robuste Prüfung ohne grep -q / SIGPIPE).
+LIST="$(unzip -l "$OUT")"
 echo "--- Inhalt (Auszug) ---"
-unzip -l "$OUT" | sed -n '1,15p'
+printf '%s\n' "$LIST" | sed -n '1,12p'
 echo "..."
-echo "Hauptdatei vorhanden:"
-unzip -l "$OUT" | grep -q "${SLUG}/${SLUG}.php" && echo "  OK ${SLUG}/${SLUG}.php" || { echo "  FEHLT!"; exit 1; }
-echo "Update-Bibliothek vorhanden:"
-unzip -l "$OUT" | grep -q "${SLUG}/includes/plugin-update-checker/plugin-update-checker.php" && echo "  OK plugin-update-checker" || { echo "  FEHLT!"; exit 1; }
+
+require_in_zip() {
+	local needle="$1" label="$2"
+	if printf '%s\n' "$LIST" | grep -Fq -- "$needle"; then
+		echo "  OK   $label"
+	else
+		echo "  FEHLT: $label  ($needle)"
+		exit 1
+	fi
+}
+
+echo "Pflicht-Bestandteile:"
+require_in_zip "${SLUG}/${SLUG}.php"                                          "Hauptdatei"
+require_in_zip "${SLUG}/includes/plugin-update-checker/plugin-update-checker.php" "Update-Bibliothek (Loader)"
+require_in_zip "${SLUG}/includes/plugin-update-checker/vendor/Parsedown.php"  "Update-Bibliothek (vendor)"
+require_in_zip "${SLUG}/includes/class-wc-gateway-bf-twint.php"               "Gateway-Klasse"
+echo "ZIP ist vollständig."
