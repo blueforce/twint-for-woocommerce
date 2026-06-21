@@ -79,6 +79,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 			'description'  => isset( $this->settings['description'] ) ? $this->settings['description'] : '',
 			'mode'         => isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send',
 			'phone'        => isset( $this->settings['phone'] ) ? $this->settings['phone'] : '',
+			'icon'         => BF_TWINT_URL . 'assets/img/twint-logo.svg',
 			'supports'     => array( 'products' ),
 		);
 	}

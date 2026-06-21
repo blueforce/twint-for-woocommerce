@@ -25,6 +25,21 @@
 	var description = decode( settings.description || '' );
 	var mode = settings.mode || 'send';
 	var phone = decode( settings.phone || '' );
+	var icon = settings.icon || '';
+
+	// Label mit TWINT-Logo (wie im klassischen Checkout).
+	var Label = function () {
+		var parts = [ el( 'span', { key: 'txt' }, label ) ];
+		if ( icon ) {
+			parts.push( el( 'img', {
+				key: 'icon',
+				src: icon,
+				alt: 'TWINT',
+				style: { height: '24px', width: 'auto', marginLeft: '8px' },
+			} ) );
+		}
+		return el( 'span', { style: { display: 'inline-flex', alignItems: 'center' } }, parts );
+	};
 
 	var Content = function ( props ) {
 		var onPaymentSetup = props.eventRegistration.onPaymentSetup;
@@ -59,7 +74,10 @@
 		}
 
 		if ( 'request' === mode ) {
-			children.push( el( 'label', { key: 'lbl', htmlFor: 'bf_twint_phone', style: { display: 'block', marginTop: '8px', fontWeight: 600 } }, __( 'TWINT-Handynummer', 'twint-for-woocommerce' ) ) );
+			children.push( el( 'label', { key: 'lbl', htmlFor: 'bf_twint_phone', style: { display: 'block', marginTop: '8px', fontWeight: 600 } }, [
+				__( 'TWINT-Handynummer', 'twint-for-woocommerce' ),
+				el( 'abbr', { key: 'req', className: 'required', title: __( 'Pflichtfeld', 'twint-for-woocommerce' ), style: { color: '#b32d2e', textDecoration: 'none', marginLeft: '2px' } }, '*' ),
+			] ) );
 			children.push( el( 'input', {
 				key: 'inp',
 				id: 'bf_twint_phone',
@@ -80,7 +98,7 @@
 
 	registerPaymentMethod( {
 		name: 'bf_twint',
-		label: label,
+		label: el( Label ),
 		content: el( Content ),
 		edit: el( Content ),
 		canMakePayment: function () { return true; },

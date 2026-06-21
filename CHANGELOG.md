@@ -9,6 +9,12 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.0.2] – 2026-06-21
+
+### Geändert
+- Block-Checkout: TWINT-Logo neben dem Methodennamen (wie im klassischen Checkout).
+- Block-Checkout: Pflichtfeld-Markierung («*») am Label «TWINT-Handynummer» im Ablauf «request».
+
 ## [1.0.1] – 2026-06-21
 
 ### Hinzugefügt
