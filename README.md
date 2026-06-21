@@ -40,15 +40,28 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 - ✅ Anweisungen auf der Danke-Seite, in der Bestell-E-Mail und im Backend
 - ✅ Vollständig übersetzbar (Text-Domain `twint-for-woocommerce`, deutsche Strings)
 - ✅ Kompatibel mit **HPOS** (High-Performance Order Storage)
-- ✅ Keine externen Abhängigkeiten, kein Build-Step, keine Tracking-Aufrufe
+- ✅ **Automatische Updates direkt im WordPress-Backend** (1-Klick, ohne wordpress.org)
+- ✅ Kein Build-Step, keine Tracking-Aufrufe
 
 ## Installation
 
-1. Den Plugin-Ordner als ZIP packen bzw. das [Release-ZIP](https://github.com/blueforce/twint-for-woocommerce/releases) herunterladen.
+1. Das **[aktuelle Release-ZIP](https://github.com/blueforce/twint-for-woocommerce/releases/latest)** herunterladen (Datei `twint-for-woocommerce.zip` unter «Assets»).
 2. In WordPress unter **Plugins → Installieren → Plugin hochladen** einspielen und aktivieren.
 3. Unter **WooCommerce → Einstellungen → Zahlungen → TWINT** aktivieren und konfigurieren.
 
 **Voraussetzungen:** WordPress 6.0+, WooCommerce 7.0+, PHP 7.4+.
+
+> ⚠️ Lade das **Release-Asset** `twint-for-woocommerce.zip` herunter – **nicht** den grünen «Code → Download ZIP»-Button. Der Quellcode-Download enthält einen falsch benannten Ordner und die Update-Bibliothek wird nicht ausgeliefert.
+
+## Automatische Updates
+
+Obwohl das Plugin nicht im wordpress.org-Verzeichnis liegt, erhältst du Updates **direkt im Backend** – wie bei jedem anderen Plugin:
+
+- Sobald ein neues Release (z. B. `1.0.1`) veröffentlicht wird, erscheint unter **Plugins** der Hinweis «Es ist eine neue Version verfügbar».
+- Mit **«Jetzt aktualisieren»** wird die neue Version mit einem Klick installiert.
+- Optional lassen sich unter **Plugins** auch **automatische Updates aktivieren**.
+
+Technisch übernimmt das der eingebettete [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker), der die GitHub-Releases dieses Repos prüft. Es werden dabei keine personenbezogenen Daten an Dritte übermittelt.
 
 ## Konfiguration
 

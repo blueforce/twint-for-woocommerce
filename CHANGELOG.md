@@ -4,6 +4,17 @@ Alle nennenswerten Änderungen an diesem Projekt werden hier dokumentiert.
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 die Versionierung an [Semantic Versioning](https://semver.org/lang/de/).
 
+## [1.0.1] – 2026-06-21
+
+### Hinzugefügt
+- **Automatische Updates** direkt im WordPress-Backend (1-Klick) über die GitHub-Releases,
+  via eingebettetem [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker).
+- `build.sh` + `.gitattributes`: erzeugt ein sauberes, installierbares Release-ZIP
+  (`twint-for-woocommerce.zip`) mit korrektem Ordnernamen.
+
+### Geändert
+- README: Abschnitte «Installation» und «Automatische Updates» ergänzt.
+
 ## [1.0.0] – 2026-06-21
 
 ### Hinzugefügt

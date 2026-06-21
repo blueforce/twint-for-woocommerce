@@ -3,7 +3,7 @@
  * Plugin Name:       TWINT for WooCommerce
  * Plugin URI:        https://github.com/blueforce/twint-for-woocommerce
  * Description:       TWINT als Bezahlmethode für WooCommerce – ohne API, ohne Vertrag mit TWINT. Zwei Abläufe: «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Blueforce Digital Solutions
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.0.0' );
+define( 'BF_TWINT_VERSION', '1.0.1' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
@@ -62,6 +62,22 @@ add_action( 'before_woocommerce_init', static function () {
 	\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', BF_TWINT_FILE, true );
 	\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', BF_TWINT_FILE, true );
 } );
+
+/**
+ * Automatische Updates aus den GitHub-Releases.
+ *
+ * Zeigt neue Versionen (z. B. 1.0.1) direkt im WordPress-Backend an und erlaubt die
+ * 1-Klick-Aktualisierung – wie bei Plugins aus dem wordpress.org-Verzeichnis. Quelle
+ * sind die Release-Assets (sauberes ZIP) des Repos.
+ */
+require_once BF_TWINT_PATH . 'includes/plugin-update-checker/plugin-update-checker.php';
+$bf_twint_update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+	'https://github.com/blueforce/twint-for-woocommerce/',
+	BF_TWINT_FILE,
+	'twint-for-woocommerce'
+);
+$bf_twint_update_checker->setBranch( 'main' );
+$bf_twint_update_checker->getVcsApi()->enableReleaseAssets();
 
 /**
  * Gateway-Klasse laden und registrieren (klassischer Checkout).
