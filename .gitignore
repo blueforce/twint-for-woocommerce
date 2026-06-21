@@ -19,3 +19,6 @@ node_modules/
 
 # Ausgangsgrundlage (lokal behalten, nicht ins öffentliche Repo)
 /basic/
+
+# Marketing-/Blog-Material (gehört nicht ins öffentliche Plugin-Repo)
+/_marketing/
