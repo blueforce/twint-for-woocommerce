@@ -80,6 +80,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		$this->instructions = $this->get_option( 'instructions' );
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'email_instructions' ), 10, 3 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'admin_order_details' ) );
@@ -147,9 +148,9 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				'desc_tip'    => true,
 			),
 			'qr_image'     => array(
-				'title'       => __( 'TWINT-QR-Bild (URL)', 'twint-for-woocommerce' ),
-				'type'        => 'text',
-				'description' => __( 'Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild in der Mediathek und trage hier die Bild-URL ein. Der Kunde kann ihn dann direkt scannen.', 'twint-for-woocommerce' ),
+				'title'       => __( 'TWINT-QR-Bild', 'twint-for-woocommerce' ),
+				'type'        => 'qr_image',
+				'description' => __( 'Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild und wähle ihn hier aus der Mediathek. Der Kunde kann ihn dann direkt scannen.', 'twint-for-woocommerce' ),
 				'default'     => '',
 			),
 			'instructions' => array(
@@ -159,6 +160,96 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				'default'     => __( 'Wir bearbeiten deine Bestellung, sobald die Zahlung eingegangen ist.', 'twint-for-woocommerce' ),
 			),
 		);
+	}
+
+	/**
+	 * Lädt den WordPress-Media-Uploader nur auf der TWINT-Einstellungsseite.
+	 *
+	 * @param string $hook Aktuelle Admin-Seite.
+	 */
+	public function admin_assets( $hook ) {
+		if ( 'woocommerce_page_wc-settings' !== $hook ) {
+			return;
+		}
+		$section = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( $this->id !== $section ) {
+			return;
+		}
+
+		wp_enqueue_media();
+		wp_enqueue_script(
+			'bf-twint-admin-qr',
+			BF_TWINT_URL . 'assets/js/admin-qr.js',
+			array( 'jquery' ),
+			BF_TWINT_VERSION,
+			true
+		);
+		wp_localize_script(
+			'bf-twint-admin-qr',
+			'bfTwintQr',
+			array(
+				'title'  => __( 'TWINT-QR-Bild wählen', 'twint-for-woocommerce' ),
+				'button' => __( 'Dieses Bild verwenden', 'twint-for-woocommerce' ),
+			)
+		);
+	}
+
+	/**
+	 * Eigener Feldtyp «qr_image»: URL-Feld + Button zur Auswahl aus der Mediathek + Vorschau.
+	 *
+	 * @param string $key  Feld-Key.
+	 * @param array  $data Feld-Definition.
+	 * @return string
+	 */
+	public function generate_qr_image_html( $key, $data ) {
+		$field_key = $this->get_field_key( $key );
+		$data      = wp_parse_args(
+			$data,
+			array(
+				'title'       => '',
+				'class'       => '',
+				'css'         => '',
+				'placeholder' => '',
+				'desc_tip'    => false,
+				'description' => '',
+			)
+		);
+		$value = $this->get_option( $key );
+
+		ob_start();
+		?>
+		<tr valign="top">
+			<th scope="row" class="titledesc">
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></label>
+			</th>
+			<td class="forminp">
+				<fieldset>
+					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
+					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="url" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $value ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" />
+					<button type="button" class="button bf-twint-qr-upload" data-target="<?php echo esc_attr( $field_key ); ?>"><?php esc_html_e( 'Bild auswählen', 'twint-for-woocommerce' ); ?></button>
+					<button type="button" class="button bf-twint-qr-remove" data-target="<?php echo esc_attr( $field_key ); ?>" style="<?php echo $value ? '' : 'display:none'; ?>"><?php esc_html_e( 'Entfernen', 'twint-for-woocommerce' ); ?></button>
+					<?php echo $this->get_description_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<div class="bf-twint-qr-preview" style="margin-top:8px">
+						<?php if ( $value ) : ?>
+							<img src="<?php echo esc_url( $value ); ?>" alt="" style="max-width:160px;height:auto;border:1px solid #ddd;padding:4px;background:#fff" />
+						<?php endif; ?>
+					</div>
+				</fieldset>
+			</td>
+		</tr>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Sanitisiert den Wert des QR-Bild-Feldes als URL.
+	 *
+	 * @param string $key   Feld-Key.
+	 * @param string $value Rohwert.
+	 * @return string
+	 */
+	public function validate_qr_image_field( $key, $value ) {
+		return esc_url_raw( trim( (string) $value ) );
 	}
 
 	/**

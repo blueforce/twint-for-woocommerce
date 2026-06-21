@@ -70,7 +70,7 @@ Technisch übernimmt das der eingebettete [Plugin Update Checker](https://github
 | **Ablauf** | «Kunde sendet» oder «Ich fordere an» |
 | **Deine TWINT-Handynummer** | Nummer, an die der Kunde sendet (Ablauf «Kunde sendet») |
 | **Name des Kontoinhabers** | Optional, zur Kontrolle für den Kunden |
-| **TWINT-QR-Bild (URL)** | Optional: lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn in der Mediathek und trage die Bild-URL ein |
+| **TWINT-QR-Bild** | Optional: lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild und wähle ihn per Button direkt aus der Mediathek |
 | **Zusätzliche Hinweise** | Freitext für Danke-Seite und E-Mail |
 
 ## Mitwirken

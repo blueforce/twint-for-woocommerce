@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment, payment gateway, switzerland
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,9 @@ Nein. Der Zahlungseingang wird in der TWINT-App geprüft und die Bestellung von 
 Nein. Es ist ein unabhängiges Community-Projekt von Blueforce Digital Solutions und steht in keiner Verbindung zur TWINT AG.
 
 == Changelog ==
+
+= 1.1.0 =
+* TWINT-QR-Bild: Auswahl direkt aus der Mediathek per Button (statt URL eintippen), mit Vorschau.
 
 = 1.0.2 =
 * Block-Checkout: TWINT-Logo neben dem Methodennamen und Pflichtfeld-Markierung («*») bei der Handynummer.

@@ -9,6 +9,13 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.1.0] – 2026-06-21
+
+### Hinzugefügt
+- **TWINT-QR-Bild aus der Mediathek wählen:** Das Feld hat jetzt einen Button «Bild
+  auswählen», der den WordPress-Media-Uploader öffnet, plus Vorschau und «Entfernen».
+  Die URL muss nicht mehr von Hand eingetragen werden.
+
 ## [1.0.2] – 2026-06-21
 
 ### Geändert
