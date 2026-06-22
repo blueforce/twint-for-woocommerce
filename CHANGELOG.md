@@ -9,6 +9,27 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.2.0] – 2026-06-22
+
+### Hinzugefügt
+- **«Zahlung erhalten»-Button** in der Bestellansicht: Setzt eine TWINT-Bestellung
+  per Klick auf bezahlt (`payment_complete`) und hinterlegt eine Notiz – ohne
+  manuellen Statuswechsel. Reiner Form-POST mit Nonce und Berechtigungs-Check.
+- **Französische (fr_CH) und italienische (it_CH) Übersetzung** für die
+  Westschweiz und das Tessin – inklusive Block-Checkout (JS).
+- **Kopier-Button für die Bestellnummer** auf der Danke-Seite (Ablauf «Kunde
+  sendet»): Der Kunde übernimmt die TWINT-Mitteilung mit einem Klick – weniger
+  Tippfehler bei der Referenz.
+
+### Geändert
+- TWINT wird im Checkout nur noch angezeigt, wenn die Shop-Währung **CHF** ist
+  (verhindert Fehlbestellungen in Fremdwährung). Über den Filter
+  `bf_twint_is_available` bei Bedarf übersteuerbar.
+
+### Behoben
+- Fehlenden Block-Checkout-String («Wir senden dir eine TWINT-Zahlungsanforderung
+  an diese Nummer.») in `.pot` und Übersetzungen ergänzt.
+
 ## [1.1.2] – 2026-06-21
 
 ### Sicherheit

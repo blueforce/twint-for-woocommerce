@@ -174,3 +174,24 @@ msgstr "Send the amount via TWINT to %s – you will receive the details after o
 
 msgid "Bitte gib deine TWINT-Handynummer an, damit wir die Zahlung anfordern können."
 msgstr "Please enter your TWINT mobile number so that we can request the payment."
+
+msgid "Wir senden dir eine TWINT-Zahlungsanforderung an diese Nummer."
+msgstr "We will send a TWINT payment request to this number."
+
+msgid "Kopieren"
+msgstr "Copy"
+
+msgid "Kopiert!"
+msgstr "Copied!"
+
+msgid "Bestellnummer kopieren"
+msgstr "Copy order number"
+
+msgid "Zahlung erhalten – Bestellung freigeben"
+msgstr "Payment received – release order"
+
+msgid "TWINT-Zahlung von Hand als erhalten bestätigt."
+msgstr "TWINT payment manually confirmed as received."
+
+msgid "Du hast keine Berechtigung, diese Bestellung zu bearbeiten."
+msgstr "You do not have permission to edit this order."

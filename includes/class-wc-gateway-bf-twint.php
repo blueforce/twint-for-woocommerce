@@ -99,6 +99,26 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Verfügbarkeit: TWINT funktioniert nur in Schweizer Franken.
+	 *
+	 * Blendet die Methode im Checkout aus, wenn die Shop-Währung nicht CHF ist
+	 * (verhindert Fehlbestellungen in Fremdwährung). Über den Filter
+	 * «bf_twint_is_available» lässt sich das bei Bedarf übersteuern (z. B. in
+	 * Multi-Währungs-Setups, die TWINT bewusst auch anders anbieten).
+	 *
+	 * @return bool
+	 */
+	public function is_available() {
+		$available = parent::is_available();
+
+		if ( $available && 'CHF' !== get_woocommerce_currency() ) {
+			$available = false;
+		}
+
+		return (bool) apply_filters( 'bf_twint_is_available', $available, $this );
+	}
+
+	/**
 	 * Einstellungsfelder im Admin.
 	 */
 	public function init_form_fields() {
@@ -362,10 +382,11 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	/**
 	 * Detail-Text für Danke-Seite und E-Mail (HTML).
 	 *
-	 * @param WC_Order $order Bestellung.
+	 * @param WC_Order $order   Bestellung.
+	 * @param string   $context «thankyou» (mit Kopier-Button) oder «email» (reiner Text).
 	 * @return string
 	 */
-	private function details_html( $order ) {
+	private function details_html( $order, $context = 'email' ) {
 		$out = '';
 
 		if ( 'request' === $this->mode ) {
@@ -399,11 +420,20 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				) . '</p>';
 			}
 
+			$copy_button = '';
+			if ( 'thankyou' === $context ) {
+				$copy_button = ' <button type="button" class="button bf-twint-copy"'
+					. ' data-bf-twint-copy="' . esc_attr( $order->get_order_number() ) . '"'
+					. ' data-copied="' . esc_attr__( 'Kopiert!', 'twint-for-woocommerce' ) . '"'
+					. ' aria-label="' . esc_attr__( 'Bestellnummer kopieren', 'twint-for-woocommerce' ) . '">'
+					. esc_html__( 'Kopieren', 'twint-for-woocommerce' ) . '</button>';
+			}
+
 			$out .= '<p>' . sprintf(
 				/* translators: %s: order number. */
 				wp_kses_post( __( 'Verwende deine Bestellnummer %s als Mitteilung.', 'twint-for-woocommerce' ) ),
 				'<strong>#' . esc_html( $order->get_order_number() ) . '</strong>'
-			) . '</p>';
+			) . $copy_button . '</p>';
 
 			if ( $this->qr_image ) {
 				$out .= '<p><img src="' . esc_url( $this->qr_image ) . '" alt="' . esc_attr__( 'TWINT-QR-Code', 'twint-for-woocommerce' ) . '" style="max-width:220px;height:auto;border:1px solid #eee;padding:8px;background:#fff" /></p>';
@@ -424,9 +454,29 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	 */
 	public function thankyou_page( $order_id ) {
 		$order = wc_get_order( $order_id );
-		if ( $order ) {
-			echo '<section class="woocommerce-bf-twint">' . wp_kses_post( $this->details_html( $order ) ) . '</section>';
+		if ( ! $order ) {
+			return;
 		}
+
+		wp_enqueue_script(
+			'bf-twint-frontend',
+			BF_TWINT_URL . 'assets/js/frontend.js',
+			array(),
+			BF_TWINT_VERSION,
+			true
+		);
+
+		// Kopier-Button (data-Attribute) zusätzlich zu wp_kses_post erlauben.
+		$allowed                       = wp_kses_allowed_html( 'post' );
+		$allowed['button']             = array(
+			'type'              => true,
+			'class'             => true,
+			'aria-label'        => true,
+			'data-bf-twint-copy' => true,
+			'data-copied'       => true,
+		);
+
+		echo '<section class="woocommerce-bf-twint">' . wp_kses( $this->details_html( $order, 'thankyou' ), $allowed ) . '</section>';
 	}
 
 	/**
@@ -485,6 +535,48 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			echo esc_html__( '3. Nach Versand: «Abgeschlossen».', 'twint-for-woocommerce' ) . '</p>';
 		}
 
+		// Ein-Klick-Bestätigung: Bestellung als bezahlt freigeben (nur solange offen).
+		if ( $order->has_status( array( 'on-hold', 'pending' ) ) ) {
+			echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin-top:10px">';
+			echo '<input type="hidden" name="action" value="bf_twint_mark_paid" />';
+			echo '<input type="hidden" name="order_id" value="' . esc_attr( $order->get_id() ) . '" />';
+			wp_nonce_field( 'bf_twint_mark_paid_' . $order->get_id() );
+			echo '<button type="submit" class="button button-primary">' . esc_html__( 'Zahlung erhalten – Bestellung freigeben', 'twint-for-woocommerce' ) . '</button>';
+			echo '</form>';
+		}
+
 		echo '</div>';
+	}
+
+	/**
+	 * Verarbeitet den «Zahlung erhalten»-Button aus der Bestellansicht.
+	 *
+	 * Setzt die Bestellung per WooCommerce-Standard auf bezahlt (payment_complete →
+	 * Status «In Bearbeitung» bzw. «Abgeschlossen» bei rein virtuellen Bestellungen)
+	 * und hinterlegt eine Notiz. Reiner Form-POST mit Nonce, kein JavaScript.
+	 *
+	 * @return void
+	 */
+	public static function handle_mark_paid() {
+		$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+
+		check_admin_referer( 'bf_twint_mark_paid_' . $order_id );
+
+		if ( ! current_user_can( 'edit_shop_orders' ) && ! current_user_can( 'edit_shop_order', $order_id ) ) {
+			wp_die( esc_html__( 'Du hast keine Berechtigung, diese Bestellung zu bearbeiten.', 'twint-for-woocommerce' ) );
+		}
+
+		$order = $order_id ? wc_get_order( $order_id ) : false;
+
+		if ( $order
+			&& BF_TWINT_GATEWAY_ID === $order->get_payment_method()
+			&& $order->has_status( array( 'on-hold', 'pending' ) )
+		) {
+			$order->add_order_note( __( 'TWINT-Zahlung von Hand als erhalten bestätigt.', 'twint-for-woocommerce' ), false );
+			$order->payment_complete();
+		}
+
+		wp_safe_redirect( wp_get_referer() ? wp_get_referer() : admin_url( 'admin.php?page=wc-orders' ) );
+		exit;
 	}
 }

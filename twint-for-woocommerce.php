@@ -3,7 +3,7 @@
  * Plugin Name:       TWINT for WooCommerce
  * Plugin URI:        https://github.com/blueforce/twint-for-woocommerce
  * Description:       TWINT als Bezahlmethode für WooCommerce – ohne API, ohne Vertrag mit TWINT. Zwei Abläufe: «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt.
- * Version:           1.1.2
+ * Version:           1.2.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Blueforce Digital Solutions
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.1.2' );
+define( 'BF_TWINT_VERSION', '1.2.0' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
@@ -106,6 +106,9 @@ add_action( 'plugins_loaded', static function () {
 		$gateways[] = 'WC_Gateway_BF_TWINT';
 		return $gateways;
 	} );
+
+	// «Zahlung erhalten»-Button aus der Bestellansicht (Form-POST).
+	add_action( 'admin_post_bf_twint_mark_paid', array( 'WC_Gateway_BF_TWINT', 'handle_mark_paid' ) );
 }, 11 );
 
 /**
