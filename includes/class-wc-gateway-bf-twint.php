@@ -329,6 +329,57 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Speichert die bestellrelevanten Einstellungen als Snapshot in der Bestellung.
+	 *
+	 * So bleiben Danke-Seite, E-Mail und Admin-Ansicht einer Bestellung korrekt,
+	 * auch wenn der Shop den Ablauf, die Nummer oder den QR-Code später ändert.
+	 * Der Marker «_bf_twint_snapshot» (= Plugin-Version) zeigt an, dass ein Snapshot
+	 * vorliegt; nur dann werden die gespeicherten – auch leere – Werte verwendet.
+	 *
+	 * Setzt die Meta nur in den Speicher; das eigentliche $order->save() erfolgt
+	 * durch den Aufrufer.
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @return void
+	 */
+	public function store_settings_snapshot( $order ) {
+		$order->update_meta_data( '_bf_twint_snapshot', BF_TWINT_VERSION );
+		$order->update_meta_data( '_bf_twint_mode', $this->mode );
+		$order->update_meta_data( '_bf_twint_shop_phone', $this->phone );
+		$order->update_meta_data( '_bf_twint_account_name', $this->account_name );
+		$order->update_meta_data( '_bf_twint_qr_image', $this->qr_image );
+		$order->update_meta_data( '_bf_twint_instructions', $this->instructions );
+	}
+
+	/**
+	 * Liest eine bestellrelevante Einstellung – bevorzugt aus dem Order-Snapshot,
+	 * sonst aus den aktuellen Plugin-Einstellungen (Altbestellungen ohne Snapshot).
+	 *
+	 * @param WC_Order $order Bestellung.
+	 * @param string   $key   Einer von: mode, shop_phone, account_name, qr_image, instructions.
+	 * @return string
+	 */
+	private function order_setting( $order, $key ) {
+		if ( '' !== (string) $order->get_meta( '_bf_twint_snapshot' ) ) {
+			return (string) $order->get_meta( '_bf_twint_' . $key );
+		}
+
+		switch ( $key ) {
+			case 'mode':
+				return (string) $this->mode;
+			case 'shop_phone':
+				return (string) $this->phone;
+			case 'account_name':
+				return (string) $this->account_name;
+			case 'qr_image':
+				return (string) $this->qr_image;
+			case 'instructions':
+				return (string) $this->instructions;
+		}
+		return '';
+	}
+
+	/**
 	 * Zahlung verarbeiten: Bestellung auf «In Wartestellung», kein API-Call.
 	 *
 	 * @param int $order_id Bestell-ID.
@@ -340,6 +391,9 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		if ( ! $order ) {
 			return array( 'result' => 'failure' );
 		}
+
+		// Bestellrelevante Einstellungen einfrieren (vor dem späteren save()).
+		$this->store_settings_snapshot( $order );
 
 		if ( 'request' === $this->mode ) {
 			$phone = isset( $_POST['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['bf_twint_phone'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
@@ -389,7 +443,13 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	private function details_html( $order, $context = 'email' ) {
 		$out = '';
 
-		if ( 'request' === $this->mode ) {
+		$mode         = $this->order_setting( $order, 'mode' );
+		$shop_phone   = $this->order_setting( $order, 'shop_phone' );
+		$account_name = $this->order_setting( $order, 'account_name' );
+		$qr_image     = $this->order_setting( $order, 'qr_image' );
+		$instructions = $this->order_setting( $order, 'instructions' );
+
+		if ( 'request' === $mode ) {
 			$phone = $order->get_meta( '_bf_twint_customer_phone' );
 			$out  .= '<p>' . sprintf(
 				/* translators: %s: customer phone number (may be empty). */
@@ -405,18 +465,18 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				/* translators: 1: order total, 2: shop TWINT phone (may be empty). */
 				wp_kses_post( __( 'Bitte sende %1$s via <strong>TWINT</strong>%2$s.', 'twint-for-woocommerce' ) ),
 				'<strong>' . wp_kses_post( $order->get_formatted_order_total() ) . '</strong>',
-				$this->phone ? ' ' . sprintf(
+				$shop_phone ? ' ' . sprintf(
 					/* translators: %s: phone number. */
 					esc_html__( 'an %s', 'twint-for-woocommerce' ),
-					'<strong>' . esc_html( $this->phone ) . '</strong>'
+					'<strong>' . esc_html( $shop_phone ) . '</strong>'
 				) : ''
 			) . '</p>';
 
-			if ( $this->account_name ) {
+			if ( $account_name ) {
 				$out .= '<p>' . sprintf(
 					/* translators: %s: account holder name. */
 					esc_html__( 'Kontoinhaber: %s', 'twint-for-woocommerce' ),
-					'<strong>' . esc_html( $this->account_name ) . '</strong>'
+					'<strong>' . esc_html( $account_name ) . '</strong>'
 				) . '</p>';
 			}
 
@@ -435,13 +495,13 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				'<strong>#' . esc_html( $order->get_order_number() ) . '</strong>'
 			) . $copy_button . '</p>';
 
-			if ( $this->qr_image ) {
-				$out .= '<p><img src="' . esc_url( $this->qr_image ) . '" alt="' . esc_attr__( 'TWINT-QR-Code', 'twint-for-woocommerce' ) . '" style="max-width:220px;height:auto;border:1px solid #eee;padding:8px;background:#fff" /></p>';
+			if ( $qr_image ) {
+				$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT-QR-Code', 'twint-for-woocommerce' ) . '" style="max-width:220px;height:auto;border:1px solid #eee;padding:8px;background:#fff" /></p>';
 			}
 		}
 
-		if ( $this->instructions ) {
-			$out .= wpautop( wp_kses_post( $this->instructions ) );
+		if ( $instructions ) {
+			$out .= wpautop( wp_kses_post( $instructions ) );
 		}
 
 		return $out;
@@ -507,10 +567,11 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		}
 
 		$total = $order->get_currency() . ' ' . number_format( (float) $order->get_total(), 2, '.', "'" );
+		$mode  = $this->order_setting( $order, 'mode' );
 
 		echo '<div style="margin-top:10px;padding:10px 12px;background:#f6efe2;border:1px solid #d9c9a3;border-radius:4px">';
 
-		if ( 'request' === $this->mode ) {
+		if ( 'request' === $mode ) {
 			$phone = $order->get_meta( '_bf_twint_customer_phone' );
 			echo '<p style="margin:0 0 6px"><strong>' . esc_html__( 'TWINT-Handynummer (Kunde):', 'twint-for-woocommerce' ) . '</strong> ' . ( $phone ? esc_html( $phone ) : '<em>' . esc_html__( 'keine', 'twint-for-woocommerce' ) . '</em>' ) . '</p>';
 			echo '<p style="margin:0;font-size:12px;color:#555"><strong>' . esc_html__( 'Vorgehen:', 'twint-for-woocommerce' ) . '</strong><br>';

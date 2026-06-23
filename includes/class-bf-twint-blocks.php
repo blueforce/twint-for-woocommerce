@@ -137,8 +137,21 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 			}
 		}
 
+		$dirty = false;
+
+		// Bestellrelevante Einstellungen einfrieren (analog zum klassischen Checkout).
+		$gateway = $this->get_gateway();
+		if ( $gateway ) {
+			$gateway->store_settings_snapshot( $context->order );
+			$dirty = true;
+		}
+
 		if ( '' !== $phone ) {
 			$context->order->update_meta_data( '_bf_twint_customer_phone', $phone );
+			$dirty = true;
+		}
+
+		if ( $dirty ) {
 			$context->order->save();
 		}
 	}
