@@ -81,6 +81,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
+		add_action( 'admin_notices', array( $this, 'maybe_show_config_notice' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'email_instructions' ), 10, 3 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'admin_order_details' ) );
@@ -115,7 +116,53 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			$available = false;
 		}
 
+		// Ablauf «Kunde sendet» ist nur sinnvoll, wenn der Kunde auch weiss, wohin –
+		// also eine TWINT-Nummer oder ein QR-Code hinterlegt ist. Fehlt beides, würde
+		// eine Bestellung entstehen, bei der niemand weiss, wohin gezahlt werden soll.
+		if ( $available && 'send' === $this->mode && ! $this->has_send_target() ) {
+			$available = false;
+		}
+
 		return (bool) apply_filters( 'bf_twint_is_available', $available, $this );
+	}
+
+	/**
+	 * Hat der Shop für den Ablauf «Kunde sendet» ein Zahlungsziel hinterlegt?
+	 *
+	 * @return bool
+	 */
+	public function has_send_target() {
+		return '' !== trim( (string) $this->phone ) || '' !== trim( (string) $this->qr_image );
+	}
+
+	/**
+	 * Warnt im Backend, wenn TWINT aktiv ist, aber Pflichtangaben fehlen.
+	 *
+	 * Greift im Ablauf «Kunde sendet», wenn weder Nummer noch QR-Code hinterlegt
+	 * ist – dann blendet is_available() die Methode aus, und ohne Hinweis wäre für
+	 * den Shop nicht ersichtlich, warum TWINT im Checkout nicht erscheint.
+	 *
+	 * @return void
+	 */
+	public function maybe_show_config_notice() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			return;
+		}
+		if ( 'yes' !== $this->enabled ) {
+			return;
+		}
+		if ( 'send' !== $this->mode || $this->has_send_target() ) {
+			return;
+		}
+
+		$url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . $this->id );
+		echo '<div class="notice notice-warning"><p>';
+		printf(
+			/* translators: %s: URL to the TWINT settings page. */
+			wp_kses_post( __( '<strong>TWINT for WooCommerce:</strong> Der Ablauf «Kunde sendet» ist aktiv, aber es ist weder eine TWINT-Handynummer noch ein QR-Code hinterlegt. Die Bezahlmethode wird im Checkout ausgeblendet, bis du die <a href="%s">Angaben ergänzt</a>.', 'twint-for-woocommerce' ) ),
+			esc_url( $url )
+		);
+		echo '</p></div>';
 	}
 
 	/**
@@ -318,14 +365,31 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Prüft, ob eine Handynummer mindestens sinnvoll aussieht (>= 6 Ziffern).
+	 * Bringt eine Handynummer in eine einheitliche Anzeigeform.
+	 *
+	 * Entfernt unzulässige Zeichen, reduziert Mehrfach-Leerzeichen und trimmt.
+	 * Bewusst konservativ (keine Ländervorwahl-Logik), damit international
+	 * eingegebene Nummern nicht verfälscht werden.
+	 *
+	 * @param string $phone Rohwert.
+	 * @return string
+	 */
+	public function normalize_phone( $phone ) {
+		$phone = preg_replace( '/[^\d+\s()\/.-]/', '', (string) $phone );
+		$phone = preg_replace( '/\s+/', ' ', (string) $phone );
+		return trim( (string) $phone );
+	}
+
+	/**
+	 * Prüft, ob eine Handynummer plausibel ist (6–15 Ziffern, E.164-Rahmen).
 	 *
 	 * @param string $phone Rohwert.
 	 * @return bool
 	 */
 	public function is_valid_phone( $phone ) {
 		$digits = preg_replace( '/\D+/', '', (string) $phone );
-		return strlen( $digits ) >= 6;
+		$len    = strlen( (string) $digits );
+		return $len >= 6 && $len <= 15;
 	}
 
 	/**
@@ -403,9 +467,14 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				$phone = (string) $order->get_meta( '_bf_twint_customer_phone' );
 			}
 
-			if ( '' !== $phone ) {
-				$order->update_meta_data( '_bf_twint_customer_phone', $phone );
+			// Defensive Nachprüfung: ohne gültige Nummer keine Bestellung anlegen.
+			if ( ! $this->is_valid_phone( $phone ) ) {
+				wc_add_notice( __( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'twint-for-woocommerce' ), 'error' );
+				return array( 'result' => 'failure' );
 			}
+
+			$phone = $this->normalize_phone( $phone );
+			$order->update_meta_data( '_bf_twint_customer_phone', $phone );
 
 			$order->update_status(
 				'on-hold',

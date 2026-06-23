@@ -126,21 +126,24 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 			return;
 		}
 
-		$data  = $context->payment_data;
-		$phone = isset( $data['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $data['bf_twint_phone'] ) ) : '';
-		$mode  = isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send';
+		$gateway = $this->get_gateway();
+		$data    = $context->payment_data;
+		$phone   = isset( $data['bf_twint_phone'] ) ? sanitize_text_field( wp_unslash( $data['bf_twint_phone'] ) ) : '';
+		$mode    = isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send';
 
 		if ( 'request' === $mode ) {
-			$digits = preg_replace( '/\D+/', '', $phone );
-			if ( strlen( (string) $digits ) < 6 ) {
+			$valid = $gateway ? $gateway->is_valid_phone( $phone ) : ( strlen( (string) preg_replace( '/\D+/', '', $phone ) ) >= 6 );
+			if ( ! $valid ) {
 				throw new \Exception( esc_html__( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'twint-for-woocommerce' ) );
+			}
+			if ( $gateway ) {
+				$phone = $gateway->normalize_phone( $phone );
 			}
 		}
 
 		$dirty = false;
 
 		// Bestellrelevante Einstellungen einfrieren (analog zum klassischen Checkout).
-		$gateway = $this->get_gateway();
 		if ( $gateway ) {
 			$gateway->store_settings_snapshot( $context->order );
 			$dirty = true;
