@@ -38,10 +38,38 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 	/**
 	 * Ist die Methode aktiv?
 	 *
+	 * Delegiert an die Verfügbarkeitsprüfung des Gateways, damit der Block-Checkout
+	 * dieselben Regeln wie der klassische Checkout anwendet – insbesondere den
+	 * CHF-Guard und den Filter «bf_twint_is_available». Ohne diese Delegation bliebe
+	 * TWINT im Block-Checkout auch bei Fremdwährung sichtbar.
+	 *
 	 * @return bool
 	 */
 	public function is_active() {
-		return ! empty( $this->settings['enabled'] ) && 'yes' === $this->settings['enabled'];
+		if ( empty( $this->settings['enabled'] ) || 'yes' !== $this->settings['enabled'] ) {
+			return false;
+		}
+
+		$gateway = $this->get_gateway();
+		if ( $gateway ) {
+			return $gateway->is_available();
+		}
+
+		// Fallback ohne Gateway-Objekt: wenigstens die Währung absichern.
+		return 'CHF' === get_woocommerce_currency();
+	}
+
+	/**
+	 * Holt die registrierte Gateway-Instanz (oder null, falls nicht verfügbar).
+	 *
+	 * @return WC_Gateway_BF_TWINT|null
+	 */
+	private function get_gateway() {
+		if ( ! function_exists( 'WC' ) || ! WC()->payment_gateways() ) {
+			return null;
+		}
+		$gateways = WC()->payment_gateways()->payment_gateways();
+		return isset( $gateways[ BF_TWINT_GATEWAY_ID ] ) ? $gateways[ BF_TWINT_GATEWAY_ID ] : null;
 	}
 
 	/**
