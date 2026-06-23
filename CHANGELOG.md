@@ -9,6 +9,36 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.3.0] – 2026-06-23
+
+### Hinzugefügt
+- **Order-Snapshot:** Beim Checkout werden Ablauf, Nummer, Kontoinhaber, QR-Bild
+  und Hinweise pro Bestellung eingefroren. Danke-Seite, E-Mail und Backend zeigen
+  damit auch dann die korrekten Angaben, wenn die Einstellungen später geändert
+  werden (Altbestellungen fallen auf die aktuellen Einstellungen zurück).
+- **Datenschutz:** Die im Ablauf «Ich fordere an» gespeicherte Kundennummer wird
+  in den WordPress-/WooCommerce-Datenexport und die Datenlöschung einbezogen; ein
+  Textbaustein für die Datenschutzerklärung steht bereit.
+- **Admin-Hinweis**, wenn TWINT aktiv ist, aber für «Kunde sendet» weder Nummer
+  noch QR-Code hinterlegt ist.
+- **Echte Plain-Text-Variante** der Bestell-E-Mail (statt HTML).
+- **Continuous Integration:** PHP-Lint (7.4–8.3), WordPress Coding Standards
+  (WPCS + PHPCompatibilityWP) und ZIP-Build-Test als GitHub-Actions-Workflow.
+
+### Geändert
+- **Block-Checkout** wendet jetzt dieselbe Verfügbarkeitsprüfung wie der klassische
+  Checkout an (CHF-Guard, Filter `bf_twint_is_available`).
+- Telefon-Validierung zentralisiert (6–15 Ziffern) und Nummern werden einheitlich
+  normalisiert gespeichert.
+- Inline-Styles in eigene CSS-Dateien ausgelagert; Accessibility verbessert
+  (`required`, `aria-describedby`, `aria-live` am Kopier-Button).
+- «Zahlung erhalten»-Button nur noch für berechtigte Rollen sichtbar; die
+  Bestätigungsnotiz hält fest, wer freigegeben hat.
+
+### Behoben
+- Im Block-Checkout konnte TWINT bei Fremdwährung sichtbar bleiben, weil nur der
+  Aktiv-Status, nicht die Währung geprüft wurde.
+
 ## [1.2.0] – 2026-06-22
 
 ### Hinzugefügt

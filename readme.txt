@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment, payment gateway, switzerland
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,14 @@ Nur im Ablauf «Ich fordere an»: die vom Kunden im Checkout angegebene TWINT-Ha
 Im Ablauf «Ich fordere an» speichert das Plugin die vom Kunden angegebene TWINT-Handynummer als Bestell-Metadatum (`_bf_twint_customer_phone`), um die Zahlung über die TWINT-App anzufordern. Diese Nummer wird vom WooCommerce-/WordPress-Datenexport und der Datenlöschung berücksichtigt. Es werden keine Daten an Dritte übermittelt; der Zahlungsabgleich erfolgt manuell in der TWINT-App. Hinweis: Für Plugin-Updates wird die GitHub-Releases-API dieses Repositorys kontaktiert (siehe Abschnitt «Automatische Updates»).
 
 == Changelog ==
+
+= 1.3.0 =
+* Order-Snapshot: Ablauf, Nummer, Kontoinhaber, QR-Bild und Hinweise werden pro Bestellung eingefroren – Danke-Seite, E-Mail und Backend bleiben korrekt, auch wenn die Einstellungen später geändert werden.
+* Block-Checkout: TWINT wird bei Fremdwährung jetzt korrekt ausgeblendet (wie im klassischen Checkout).
+* Datenschutz: Kundennummer wird in Datenexport/-löschung einbezogen; Textbaustein für die Datenschutzerklärung ergänzt.
+* Admin-Hinweis bei unvollständiger Konfiguration; echte Plain-Text-E-Mail; zentrale Telefon-Validierung/-Normalisierung.
+* Accessibility verbessert; Inline-Styles in CSS ausgelagert; «Zahlung erhalten»-Button nur für berechtigte Rollen, mit Protokoll.
+* CI: PHP-Lint, WordPress Coding Standards und ZIP-Build-Test.
 
 = 1.2.0 =
 * «Zahlung erhalten»-Button in der Bestellansicht: TWINT-Bestellung per Klick als bezahlt freigeben.
