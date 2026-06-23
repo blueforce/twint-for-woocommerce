@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<ruleset name="TWINT for WooCommerce">
+	<description>WordPress Coding Standards für TWINT for WooCommerce.</description>
+
+	<file>.</file>
+
+	<!-- Fremdcode, Build-Material und Nicht-Plugin-Pfade ausschliessen. -->
+	<exclude-pattern>*/includes/plugin-update-checker/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/basic/*</exclude-pattern>
+	<exclude-pattern>*/_marketing/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+	<arg name="parallel" value="8"/>
+
+	<!-- WordPress-Standard. -->
+	<rule ref="WordPress">
+		<!-- Bewusst kurze Klassendateinamen (z. B. class-bf-twint-blocks.php). -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+	</rule>
+
+	<!-- Text-Domain und Prefixe dieses Plugins. -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="twint-for-woocommerce"/>
+			</property>
+		</properties>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="bf_twint"/>
+				<element value="BF_TWINT"/>
+				<element value="WC_Gateway_BF_TWINT"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- WooCommerce-Capabilities sind dem Sniff nicht bekannt. -->
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="manage_woocommerce"/>
+				<element value="edit_shop_orders"/>
+				<element value="edit_shop_order"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- wc_clean() ist eine WooCommerce-Sanitisierungsfunktion. -->
+	<rule ref="WordPress.Security.ValidatedSanitizedInput">
+		<properties>
+			<property name="customSanitizingFunctions" type="array">
+				<element value="wc_clean"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Minimal unterstützte WordPress-Version (Deprecation-Checks). -->
+	<config name="minimum_supported_wp_version" value="6.0"/>
+
+	<!-- PHP-Kompatibilität ab 7.4. -->
+	<config name="testVersion" value="7.4-"/>
+	<rule ref="PHPCompatibilityWP"/>
+</ruleset>

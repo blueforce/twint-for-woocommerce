@@ -36,32 +36,41 @@ define( 'BF_TWINT_GATEWAY_ID', 'bf_twint' );
 /**
  * Übersetzungen laden.
  */
-add_action( 'init', static function () {
-	load_plugin_textdomain( 'twint-for-woocommerce', false, dirname( plugin_basename( BF_TWINT_FILE ) ) . '/languages' );
-} );
+add_action(
+	'init',
+	static function () {
+		load_plugin_textdomain( 'twint-for-woocommerce', false, dirname( plugin_basename( BF_TWINT_FILE ) ) . '/languages' );
+	}
+);
 
 /**
  * Admin-Hinweis, falls WooCommerce fehlt.
  */
-add_action( 'admin_notices', static function () {
-	if ( class_exists( 'WooCommerce' ) ) {
-		return;
+add_action(
+	'admin_notices',
+	static function () {
+		if ( class_exists( 'WooCommerce' ) ) {
+			return;
+		}
+		echo '<div class="notice notice-error"><p>';
+		echo esc_html__( 'TWINT for WooCommerce benötigt ein aktives WooCommerce.', 'twint-for-woocommerce' );
+		echo '</p></div>';
 	}
-	echo '<div class="notice notice-error"><p>';
-	echo esc_html__( 'TWINT for WooCommerce benötigt ein aktives WooCommerce.', 'twint-for-woocommerce' );
-	echo '</p></div>';
-} );
+);
 
 /**
  * HPOS (High-Performance Order Storage) und Cart/Checkout-Blocks als kompatibel deklarieren.
  */
-add_action( 'before_woocommerce_init', static function () {
-	if ( ! class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
-		return;
+add_action(
+	'before_woocommerce_init',
+	static function () {
+		if ( ! class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+			return;
+		}
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', BF_TWINT_FILE, true );
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', BF_TWINT_FILE, true );
 	}
-	\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', BF_TWINT_FILE, true );
-	\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', BF_TWINT_FILE, true );
-} );
+);
 
 /**
  * Automatische Updates aus den GitHub-Releases.
@@ -95,46 +104,62 @@ $bf_twint_update_checker->addResultFilter(
 /**
  * Gateway-Klasse laden und registrieren (klassischer Checkout).
  */
-add_action( 'plugins_loaded', static function () {
-	if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
-		return;
-	}
+add_action(
+	'plugins_loaded',
+	static function () {
+		if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
+			return;
+		}
 
-	require_once BF_TWINT_PATH . 'includes/class-wc-gateway-bf-twint.php';
+		require_once BF_TWINT_PATH . 'includes/class-wc-gateway-bf-twint.php';
 
-	add_filter( 'woocommerce_payment_gateways', static function ( $gateways ) {
-		$gateways[] = 'WC_Gateway_BF_TWINT';
-		return $gateways;
-	} );
+		add_filter(
+			'woocommerce_payment_gateways',
+			static function ( $gateways ) {
+				$gateways[] = 'WC_Gateway_BF_TWINT';
+				return $gateways;
+			}
+		);
 
-	// «Zahlung erhalten»-Button aus der Bestellansicht (Form-POST).
-	add_action( 'admin_post_bf_twint_mark_paid', array( 'WC_Gateway_BF_TWINT', 'handle_mark_paid' ) );
+		// «Zahlung erhalten»-Button aus der Bestellansicht (Form-POST).
+		add_action( 'admin_post_bf_twint_mark_paid', array( 'WC_Gateway_BF_TWINT', 'handle_mark_paid' ) );
 
-	// Datenschutz: Kundennummer in Export/Löschung/Datenschutzerklärung einbinden.
-	require_once BF_TWINT_PATH . 'includes/class-bf-twint-privacy.php';
-	BF_TWINT_Privacy::init();
-}, 11 );
+		// Datenschutz: Kundennummer in Export/Löschung/Datenschutzerklärung einbinden.
+		require_once BF_TWINT_PATH . 'includes/class-bf-twint-privacy.php';
+		BF_TWINT_Privacy::init();
+	},
+	11
+);
 
 /**
  * Einstellungen-Link in der Plugin-Liste.
  */
-add_filter( 'plugin_action_links_' . plugin_basename( BF_TWINT_FILE ), static function ( $links ) {
-	$url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . BF_TWINT_GATEWAY_ID );
-	array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Einstellungen', 'twint-for-woocommerce' ) . '</a>' );
-	return $links;
-} );
+add_filter(
+	'plugin_action_links_' . plugin_basename( BF_TWINT_FILE ),
+	static function ( $links ) {
+		$url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=' . BF_TWINT_GATEWAY_ID );
+		array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Einstellungen', 'twint-for-woocommerce' ) . '</a>' );
+		return $links;
+	}
+);
 
 /**
  * Block-Checkout-Integration registrieren.
  */
-add_action( 'woocommerce_blocks_loaded', static function () {
-	if ( ! class_exists( 'Automattic\\WooCommerce\\Blocks\\Payments\\Integrations\\AbstractPaymentMethodType' ) ) {
-		return;
+add_action(
+	'woocommerce_blocks_loaded',
+	static function () {
+		if ( ! class_exists( 'Automattic\\WooCommerce\\Blocks\\Payments\\Integrations\\AbstractPaymentMethodType' ) ) {
+			return;
+		}
+
+		require_once BF_TWINT_PATH . 'includes/class-bf-twint-blocks.php';
+
+		add_action(
+			'woocommerce_blocks_payment_method_type_registration',
+			static function ( $registry ) {
+				$registry->register( new BF_TWINT_Blocks_Support() );
+			}
+		);
 	}
-
-	require_once BF_TWINT_PATH . 'includes/class-bf-twint-blocks.php';
-
-	add_action( 'woocommerce_blocks_payment_method_type_registration', static function ( $registry ) {
-		$registry->register( new BF_TWINT_Blocks_Support() );
-	} );
-} );
+);

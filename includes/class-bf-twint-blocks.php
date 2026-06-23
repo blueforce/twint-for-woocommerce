@@ -103,12 +103,12 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	public function get_payment_method_data() {
 		return array(
-			'title'        => isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'TWINT', 'twint-for-woocommerce' ),
-			'description'  => isset( $this->settings['description'] ) ? $this->settings['description'] : '',
-			'mode'         => isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send',
-			'phone'        => isset( $this->settings['phone'] ) ? $this->settings['phone'] : '',
-			'icon'         => BF_TWINT_URL . 'assets/img/twint-logo.svg',
-			'supports'     => array( 'products' ),
+			'title'       => isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'TWINT', 'twint-for-woocommerce' ),
+			'description' => isset( $this->settings['description'] ) ? $this->settings['description'] : '',
+			'mode'        => isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send',
+			'phone'       => isset( $this->settings['phone'] ) ? $this->settings['phone'] : '',
+			'icon'        => BF_TWINT_URL . 'assets/img/twint-logo.svg',
+			'supports'    => array( 'products' ),
 		);
 	}
 

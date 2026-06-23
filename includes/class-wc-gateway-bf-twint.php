@@ -97,7 +97,8 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		$icon = $this->icon
 			? '<img src="' . esc_url( $this->icon ) . '" alt="TWINT" style="max-height:24px;width:auto;vertical-align:middle" />'
 			: '';
-		return apply_filters( 'woocommerce_gateway_icon', $icon, $this->id );
+		// WooCommerce-Core-Filter (kein eigener Hook) – bewusst ohne Plugin-Prefix.
+		return apply_filters( 'woocommerce_gateway_icon', $icon, $this->id ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 	}
 
 	/**
@@ -307,7 +308,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				'description' => '',
 			)
 		);
-		$value = $this->get_option( $key );
+		$value     = $this->get_option( $key );
 
 		ob_start();
 		?>
@@ -350,7 +351,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	 */
 	public function payment_fields() {
 		if ( $this->description ) {
-			echo wpautop( wp_kses_post( $this->description ) );
+			echo wp_kses_post( wpautop( $this->description ) );
 		}
 
 		if ( 'request' === $this->mode ) {
@@ -681,14 +682,14 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		);
 
 		// Kopier-Button (data-Attribute) zusätzlich zu wp_kses_post erlauben.
-		$allowed                       = wp_kses_allowed_html( 'post' );
-		$allowed['button']             = array(
-			'type'              => true,
-			'class'             => true,
-			'aria-label'        => true,
-			'aria-live'         => true,
+		$allowed           = wp_kses_allowed_html( 'post' );
+		$allowed['button'] = array(
+			'type'               => true,
+			'class'              => true,
+			'aria-label'         => true,
+			'aria-live'          => true,
 			'data-bf-twint-copy' => true,
-			'data-copied'       => true,
+			'data-copied'        => true,
 		);
 
 		echo '<section class="woocommerce-bf-twint">' . wp_kses( $this->details_html( $order, 'thankyou' ), $allowed ) . '</section>';
@@ -698,8 +699,8 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	 * Anweisungen in der Bestell-E-Mail an den Kunden.
 	 *
 	 * @param WC_Order $order          Bestellung.
-	 * @param bool     $sent_to_admin  An Admin?
-	 * @param bool     $plain_text     Klartext?
+	 * @param bool     $sent_to_admin  An den Admin gerichtet.
+	 * @param bool     $plain_text     Klartext-Variante.
 	 */
 	public function email_instructions( $order, $sent_to_admin, $plain_text = false ) {
 		if ( $sent_to_admin || $order->get_payment_method() !== $this->id ) {
