@@ -83,6 +83,18 @@ Technisch übernimmt das der eingebettete [Plugin Update Checker](https://github
 | **TWINT-QR-Bild** | Optional: lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild und wähle ihn per Button direkt aus der Mediathek |
 | **Zusätzliche Hinweise** | Freitext für Danke-Seite und E-Mail |
 
+## Datenschutz
+
+Im Ablauf **«Ich fordere an»** gibt der Kunde im Checkout seine TWINT-Handynummer an. Diese wird als Bestell-Metadatum (`_bf_twint_customer_phone`) gespeichert und dient ausschliesslich dazu, die Zahlung in der TWINT-App anzufordern – sie ist personenbezogen.
+
+Das Plugin bindet diese Nummer in die WordPress-/WooCommerce-Datenschutzwerkzeuge ein:
+
+- **Datenexport** (Werkzeuge → Personenbezogene Daten exportieren): Die Nummer wird mit ausgegeben.
+- **Datenlöschung** (Werkzeuge → Personenbezogene Daten entfernen): Die Nummer wird beim Anonymisieren der Bestellung entfernt.
+- **Datenschutzerklärung**: Unter Einstellungen → Datenschutz steht ein vorformulierter Textbaustein bereit.
+
+Im Ablauf **«Kunde sendet»** werden keine personenbezogenen Zahlungsdaten des Kunden erfasst.
+
 ## Mitwirken
 
 Issues und Pull Requests sind willkommen. Versionsschema (`MAJOR.MINOR.MAINTENANCE`), Release-Prozess und Changelog-Konvention sind in **[CONTRIBUTING.md](CONTRIBUTING.md)** beschrieben; Code-Stil: WordPress Coding Standards.

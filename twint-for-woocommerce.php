@@ -109,6 +109,10 @@ add_action( 'plugins_loaded', static function () {
 
 	// «Zahlung erhalten»-Button aus der Bestellansicht (Form-POST).
 	add_action( 'admin_post_bf_twint_mark_paid', array( 'WC_Gateway_BF_TWINT', 'handle_mark_paid' ) );
+
+	// Datenschutz: Kundennummer in Export/Löschung/Datenschutzerklärung einbinden.
+	require_once BF_TWINT_PATH . 'includes/class-bf-twint-privacy.php';
+	BF_TWINT_Privacy::init();
 }, 11 );
 
 /**

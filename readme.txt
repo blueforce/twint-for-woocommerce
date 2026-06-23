@@ -51,6 +51,14 @@ Nein. Der Zahlungseingang wird in der TWINT-App geprüft und die Bestellung von 
 
 Nein. Es ist ein unabhängiges Community-Projekt von Blueforce Digital Solutions und steht in keiner Verbindung zur TWINT AG.
 
+= Welche personenbezogenen Daten werden gespeichert? =
+
+Nur im Ablauf «Ich fordere an»: die vom Kunden im Checkout angegebene TWINT-Handynummer (als Bestell-Metadatum, ausschliesslich zur Zahlungsanforderung). Sie wird in den WordPress-Datenexport und in die Datenlöschung einbezogen; ein Textbaustein für die Datenschutzerklärung steht unter Einstellungen → Datenschutz bereit. Im Ablauf «Kunde sendet» werden keine personenbezogenen Zahlungsdaten erfasst.
+
+== Privacy ==
+
+Im Ablauf «Ich fordere an» speichert das Plugin die vom Kunden angegebene TWINT-Handynummer als Bestell-Metadatum (`_bf_twint_customer_phone`), um die Zahlung über die TWINT-App anzufordern. Diese Nummer wird vom WooCommerce-/WordPress-Datenexport und der Datenlöschung berücksichtigt. Es werden keine Daten an Dritte übermittelt; der Zahlungsabgleich erfolgt manuell in der TWINT-App. Hinweis: Für Plugin-Updates wird die GitHub-Releases-API dieses Repositorys kontaktiert (siehe Abschnitt «Automatische Updates»).
+
 == Changelog ==
 
 = 1.2.0 =
