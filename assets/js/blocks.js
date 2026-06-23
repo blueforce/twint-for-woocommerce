@@ -85,10 +85,13 @@
 				value: value,
 				placeholder: '+41 79 123 45 67',
 				autoComplete: 'tel',
+				required: true,
+				'aria-required': 'true',
+				'aria-describedby': 'bf_twint_phone_hint',
 				onChange: function ( e ) { setValue( e.target.value ); },
 				style: { width: '100%', padding: '10px', marginTop: '4px' },
 			} ) );
-			children.push( el( 'span', { key: 'hint', style: { display: 'block', fontSize: '.9em', color: '#666', marginTop: '4px' } }, __( 'Wir senden dir eine TWINT-Zahlungsanforderung an diese Nummer.', 'twint-for-woocommerce' ) ) );
+			children.push( el( 'span', { key: 'hint', id: 'bf_twint_phone_hint', style: { display: 'block', fontSize: '.9em', color: '#666', marginTop: '4px' } }, __( 'Wir senden dir eine TWINT-Zahlungsanforderung an diese Nummer.', 'twint-for-woocommerce' ) ) );
 		} else if ( phone ) {
 			children.push( el( 'p', { key: 'mphone', style: { marginTop: '8px' } }, sprintf( __( 'Sende den Betrag via TWINT an %s – Details erhältst du nach der Bestellung.', 'twint-for-woocommerce' ), phone ) ) );
 		}

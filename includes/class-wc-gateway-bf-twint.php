@@ -82,6 +82,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
 		add_action( 'admin_notices', array( $this, 'maybe_show_config_notice' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_assets' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'woocommerce_email_after_order_table', array( $this, 'email_instructions' ), 10, 3 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'admin_order_details' ) );
@@ -230,19 +231,29 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Lädt den WordPress-Media-Uploader nur auf der TWINT-Einstellungsseite.
+	 * Lädt das Admin-CSS auf der TWINT-Einstellungsseite und in der Bestellansicht;
+	 * den Media-Uploader (QR-Auswahl) nur auf der Einstellungsseite.
 	 *
 	 * @param string $hook Aktuelle Admin-Seite.
 	 */
 	public function admin_assets( $hook ) {
-		if ( 'woocommerce_page_wc-settings' !== $hook ) {
-			return;
-		}
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
-		$section = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( $this->id !== $section ) {
+
+		$section    = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$is_setting = 'woocommerce_page_wc-settings' === $hook && $this->id === $section;
+
+		$screen   = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		$is_order = 'woocommerce_page_wc-orders' === $hook || ( $screen && 'shop_order' === $screen->post_type );
+
+		if ( ! $is_setting && ! $is_order ) {
+			return;
+		}
+
+		wp_enqueue_style( 'bf-twint-admin', BF_TWINT_URL . 'assets/css/admin.css', array(), BF_TWINT_VERSION );
+
+		if ( ! $is_setting ) {
 			return;
 		}
 
@@ -262,6 +273,18 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				'button' => __( 'Dieses Bild verwenden', 'twint-for-woocommerce' ),
 			)
 		);
+	}
+
+	/**
+	 * Lädt das Frontend-CSS auf Checkout- und Danke-Seite.
+	 *
+	 * @return void
+	 */
+	public function frontend_assets() {
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+			return;
+		}
+		wp_enqueue_style( 'bf-twint-frontend', BF_TWINT_URL . 'assets/css/frontend.css', array(), BF_TWINT_VERSION );
 	}
 
 	/**
@@ -299,9 +322,9 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 					<button type="button" class="button bf-twint-qr-upload" data-target="<?php echo esc_attr( $field_key ); ?>"><?php esc_html_e( 'Bild auswählen', 'twint-for-woocommerce' ); ?></button>
 					<button type="button" class="button bf-twint-qr-remove" data-target="<?php echo esc_attr( $field_key ); ?>" style="<?php echo $value ? '' : 'display:none'; ?>"><?php esc_html_e( 'Entfernen', 'twint-for-woocommerce' ); ?></button>
 					<?php echo $this->get_description_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					<div class="bf-twint-qr-preview" style="margin-top:8px">
+					<div class="bf-twint-qr-preview">
 						<?php if ( $value ) : ?>
-							<img src="<?php echo esc_url( $value ); ?>" alt="" style="max-width:160px;height:auto;border:1px solid #ddd;padding:4px;background:#fff" />
+							<img src="<?php echo esc_url( $value ); ?>" alt="" />
 						<?php endif; ?>
 					</div>
 				</fieldset>
@@ -331,10 +354,10 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		}
 
 		if ( 'request' === $this->mode ) {
-			echo '<p class="form-row form-row-wide">';
+			echo '<p class="form-row form-row-wide bf-twint-field">';
 			echo '<label for="bf_twint_phone">' . esc_html__( 'TWINT-Handynummer', 'twint-for-woocommerce' ) . ' <abbr class="required" title="' . esc_attr__( 'Pflichtfeld', 'twint-for-woocommerce' ) . '">*</abbr></label>';
-			echo '<input type="tel" id="bf_twint_phone" name="bf_twint_phone" autocomplete="tel" placeholder="+41 79 123 45 67" />';
-			echo '<span style="display:block;font-size:.9em;color:#666">' . esc_html__( 'An diese Nummer senden wir dir eine TWINT-Zahlungsanforderung.', 'twint-for-woocommerce' ) . '</span>';
+			echo '<input type="tel" id="bf_twint_phone" name="bf_twint_phone" autocomplete="tel" placeholder="+41 79 123 45 67" required aria-required="true" aria-describedby="bf_twint_phone_hint" />';
+			echo '<span id="bf_twint_phone_hint" class="bf-twint-hint">' . esc_html__( 'An diese Nummer senden wir dir eine TWINT-Zahlungsanforderung.', 'twint-for-woocommerce' ) . '</span>';
 			echo '</p>';
 		} elseif ( $this->phone ) {
 			printf(
@@ -554,6 +577,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				$copy_button = ' <button type="button" class="button bf-twint-copy"'
 					. ' data-bf-twint-copy="' . esc_attr( $order->get_order_number() ) . '"'
 					. ' data-copied="' . esc_attr__( 'Kopiert!', 'twint-for-woocommerce' ) . '"'
+					. ' aria-live="polite"'
 					. ' aria-label="' . esc_attr__( 'Bestellnummer kopieren', 'twint-for-woocommerce' ) . '">'
 					. esc_html__( 'Kopieren', 'twint-for-woocommerce' ) . '</button>';
 			}
@@ -565,7 +589,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			) . $copy_button . '</p>';
 
 			if ( $qr_image ) {
-				$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT-QR-Code', 'twint-for-woocommerce' ) . '" style="max-width:220px;height:auto;border:1px solid #eee;padding:8px;background:#fff" /></p>';
+				$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT-QR-Code', 'twint-for-woocommerce' ) . '" class="bf-twint-qr" /></p>';
 			}
 		}
 
@@ -662,6 +686,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			'type'              => true,
 			'class'             => true,
 			'aria-label'        => true,
+			'aria-live'         => true,
 			'data-bf-twint-copy' => true,
 			'data-copied'       => true,
 		);
@@ -705,12 +730,12 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		$total = $order->get_currency() . ' ' . number_format( (float) $order->get_total(), 2, '.', "'" );
 		$mode  = $this->order_setting( $order, 'mode' );
 
-		echo '<div style="margin-top:10px;padding:10px 12px;background:#f6efe2;border:1px solid #d9c9a3;border-radius:4px">';
+		echo '<div class="bf-twint-admin-box">';
 
 		if ( 'request' === $mode ) {
 			$phone = $order->get_meta( '_bf_twint_customer_phone' );
-			echo '<p style="margin:0 0 6px"><strong>' . esc_html__( 'TWINT-Handynummer (Kunde):', 'twint-for-woocommerce' ) . '</strong> ' . ( $phone ? esc_html( $phone ) : '<em>' . esc_html__( 'keine', 'twint-for-woocommerce' ) . '</em>' ) . '</p>';
-			echo '<p style="margin:0;font-size:12px;color:#555"><strong>' . esc_html__( 'Vorgehen:', 'twint-for-woocommerce' ) . '</strong><br>';
+			echo '<p><strong>' . esc_html__( 'TWINT-Handynummer (Kunde):', 'twint-for-woocommerce' ) . '</strong> ' . ( $phone ? esc_html( $phone ) : '<em>' . esc_html__( 'keine', 'twint-for-woocommerce' ) . '</em>' ) . '</p>';
+			echo '<p class="bf-twint-steps"><strong>' . esc_html__( 'Vorgehen:', 'twint-for-woocommerce' ) . '</strong><br>';
 			echo sprintf(
 				/* translators: 1: amount, 2: order number. */
 				esc_html__( '1. In der TWINT-App den Betrag (%1$s) an diese Nummer anfordern – Bestellnummer %2$s als Mitteilung.', 'twint-for-woocommerce' ),
@@ -720,8 +745,8 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			echo esc_html__( '2. Nach Zahlungseingang: Status auf «In Bearbeitung» setzen.', 'twint-for-woocommerce' ) . '<br>';
 			echo esc_html__( '3. Nach Versand: «Abgeschlossen».', 'twint-for-woocommerce' ) . '</p>';
 		} else {
-			echo '<p style="margin:0 0 6px"><strong>' . esc_html__( 'TWINT-Ablauf:', 'twint-for-woocommerce' ) . '</strong> ' . esc_html__( 'Kunde sendet den Betrag selbst.', 'twint-for-woocommerce' ) . '</p>';
-			echo '<p style="margin:0;font-size:12px;color:#555"><strong>' . esc_html__( 'Vorgehen:', 'twint-for-woocommerce' ) . '</strong><br>';
+			echo '<p><strong>' . esc_html__( 'TWINT-Ablauf:', 'twint-for-woocommerce' ) . '</strong> ' . esc_html__( 'Kunde sendet den Betrag selbst.', 'twint-for-woocommerce' ) . '</p>';
+			echo '<p class="bf-twint-steps"><strong>' . esc_html__( 'Vorgehen:', 'twint-for-woocommerce' ) . '</strong><br>';
 			echo sprintf(
 				/* translators: 1: amount, 2: order number. */
 				esc_html__( '1. Prüfe in der TWINT-App den Eingang von %1$s mit Mitteilung %2$s.', 'twint-for-woocommerce' ),
@@ -736,7 +761,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		// und nur für Nutzer, die Bestellungen bearbeiten dürfen).
 		$can_mark_paid = current_user_can( 'edit_shop_orders' ) || current_user_can( 'edit_shop_order', $order->get_id() );
 		if ( $can_mark_paid && $order->has_status( array( 'on-hold', 'pending' ) ) ) {
-			echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin-top:10px">';
+			echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 			echo '<input type="hidden" name="action" value="bf_twint_mark_paid" />';
 			echo '<input type="hidden" name="order_id" value="' . esc_attr( $order->get_id() ) . '" />';
 			wp_nonce_field( 'bf_twint_mark_paid_' . $order->get_id() );

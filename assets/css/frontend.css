@@ -1,0 +1,43 @@
+/**
+ * TWINT for WooCommerce – Frontend (klassischer Checkout & Danke-Seite).
+ */
+
+.bf-twint-field {
+	margin-top: 8px;
+}
+
+.bf-twint-field label {
+	display: block;
+	font-weight: 600;
+}
+
+.bf-twint-field .required {
+	color: #b32d2e;
+	text-decoration: none;
+	margin-left: 2px;
+}
+
+.bf-twint-field input {
+	width: 100%;
+	padding: 10px;
+	margin-top: 4px;
+}
+
+.bf-twint-hint {
+	display: block;
+	font-size: .9em;
+	color: #666;
+	margin-top: 4px;
+}
+
+.woocommerce-bf-twint .bf-twint-qr {
+	max-width: 220px;
+	height: auto;
+	border: 1px solid #eee;
+	padding: 8px;
+	background: #fff;
+}
+
+.bf-twint-copy {
+	margin-left: .5em;
+}
