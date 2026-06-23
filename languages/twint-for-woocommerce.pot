@@ -220,3 +220,6 @@ msgstr ""
 
 msgid "TWINT for WooCommerce"
 msgstr ""
+
+msgid "TWINT ist derzeit nicht vollständig konfiguriert. Bitte wähle eine andere Zahlungsart oder versuche es später erneut."
+msgstr ""

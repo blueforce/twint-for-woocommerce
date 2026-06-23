@@ -509,6 +509,12 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				)
 			);
 		} else {
+			// Defensive Nachprüfung: ohne Zahlungsziel (Nummer/QR) keine Bestellung
+			// anlegen – normalerweise blendet is_available() TWINT bereits aus.
+			if ( ! $this->has_send_target() ) {
+				wc_add_notice( __( 'TWINT ist derzeit nicht vollständig konfiguriert. Bitte wähle eine andere Zahlungsart oder versuche es später erneut.', 'twint-for-woocommerce' ), 'error' );
+				return array( 'result' => 'failure' );
+			}
 			$order->update_status( 'on-hold', __( 'TWINT: Warten auf Zahlungseingang (Kunde sendet).', 'twint-for-woocommerce' ) );
 		}
 

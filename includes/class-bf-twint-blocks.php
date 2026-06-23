@@ -55,8 +55,23 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 			return $gateway->is_available();
 		}
 
-		// Fallback ohne Gateway-Objekt: wenigstens die Währung absichern.
-		return 'CHF' === get_woocommerce_currency();
+		// Fallback ohne Gateway-Objekt: dieselben Regeln aus den Einstellungen
+		// nachbilden (CHF-Guard, Send-Target, Filter), damit die Parität gewahrt
+		// bleibt, falls die Gateway-Instanz ausnahmsweise nicht verfügbar ist.
+		$available = 'CHF' === get_woocommerce_currency();
+
+		if ( $available ) {
+			$mode = isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send';
+			if ( 'send' === $mode ) {
+				$phone = isset( $this->settings['phone'] ) ? trim( (string) $this->settings['phone'] ) : '';
+				$qr    = isset( $this->settings['qr_image'] ) ? trim( (string) $this->settings['qr_image'] ) : '';
+				if ( '' === $phone && '' === $qr ) {
+					$available = false;
+				}
+			}
+		}
+
+		return (bool) apply_filters( 'bf_twint_is_available', $available, null );
 	}
 
 	/**
@@ -132,7 +147,12 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 		$mode    = isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send';
 
 		if ( 'request' === $mode ) {
-			$valid = $gateway ? $gateway->is_valid_phone( $phone ) : ( strlen( (string) preg_replace( '/\D+/', '', $phone ) ) >= 6 );
+			if ( $gateway ) {
+				$valid = $gateway->is_valid_phone( $phone );
+			} else {
+				$digits = strlen( (string) preg_replace( '/\D+/', '', $phone ) );
+				$valid  = $digits >= 6 && $digits <= 15;
+			}
 			if ( ! $valid ) {
 				throw new \Exception( esc_html__( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'twint-for-woocommerce' ) );
 			}

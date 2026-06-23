@@ -228,6 +228,9 @@ msgstr "Si vous choisissez TWINT avec le mode « Je demande le montant » lors d
 msgid "TWINT for WooCommerce"
 msgstr "TWINT for WooCommerce"
 
+msgid "TWINT ist derzeit nicht vollständig konfiguriert. Bitte wähle eine andere Zahlungsart oder versuche es später erneut."
+msgstr "TWINT n'est actuellement pas entièrement configuré. Veuillez choisir un autre moyen de paiement ou réessayer plus tard."
+
 #~ msgid "Sende den Betrag via TWINT an %s – Details erhältst du nach der Bestellung."
 #~ msgstr "Envoyez le montant via TWINT au %s – les détails vous seront communiqués après la commande."
 

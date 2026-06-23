@@ -52,7 +52,7 @@
 			var unsubscribe = onPaymentSetup( function () {
 				if ( 'request' === mode ) {
 					var digits = ( value || '' ).replace( /[^0-9]/g, '' );
-					if ( digits.length < 6 ) {
+					if ( digits.length < 6 || digits.length > 15 ) {
 						return {
 							type: responseTypes.ERROR,
 							message: __( 'Bitte gib deine TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'twint-for-woocommerce' ),
