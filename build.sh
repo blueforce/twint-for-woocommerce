@@ -39,8 +39,23 @@ require_in_zip() {
 	fi
 }
 
+forbid_in_zip() {
+	local needle="$1" label="$2"
+	if printf '%s\n' "$LIST" | grep -Fq -- "$needle"; then
+		echo "  UNERWÜNSCHT: $label liegt im ZIP  ($needle)"
+		exit 1
+	else
+		echo "  OK   $label nicht im ZIP"
+	fi
+}
+
 echo "Pflicht-Bestandteile:"
-require_in_zip "${SLUG}/${SLUG}.php"                           "Hauptdatei"
-require_in_zip "${SLUG}/readme.txt"                            "readme.txt (WordPress.org)"
+require_in_zip "${SLUG}/${SLUG}.php"                         "Hauptdatei"
+require_in_zip "${SLUG}/readme.txt"                          "readme.txt (WordPress.org)"
 require_in_zip "${SLUG}/includes/class-bf-twint-gateway.php" "Gateway-Klasse"
+require_in_zip "${SLUG}/composer.json"                       "composer.json (Dev-Tooling, von WordPress.org gewünscht)"
+
+echo "Nicht ins ZIP (GitHub-Doku mit Repo-internen Links):"
+forbid_in_zip "${SLUG}/README.md"    "README.md"
+forbid_in_zip "${SLUG}/CHANGELOG.md" "CHANGELOG.md"
 echo "ZIP ist vollständig."

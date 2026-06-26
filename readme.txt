@@ -62,14 +62,17 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 == Changelog ==
 
 = 1.4.2 =
-* Coding standards: renamed the gateway class to use the plugin prefix (BF_TWINT_Gateway) to resolve the Plugin Check naming warning. No functional changes.
+* Coding standards: renamed the gateway class to use the plugin prefix (BF_TWINT_Gateway).
+* Header: shortened the plugin description to under 140 characters, added "Requires Plugins: woocommerce", and updated "WC tested up to".
+* Packaging: include composer.json in the distributed plugin; keep GitHub-only docs (README.md, CHANGELOG.md) out of the ZIP.
+* No functional changes.
 
 = 1.4.1 =
 * Security/hardening: escape settings field output late with wp_kses_post() (tooltip and description HTML in the QR image field); removed the corresponding phpcs:ignore annotations. No functional changes.
 
 = 1.4.0 =
-* Published in the WordPress plugin directory; plugin renamed to "Blueforce Manual Payments for TWINT".
-* Updates now run directly through WordPress.org; the previous GitHub update mechanism has been removed (no more external calls).
+* Renamed to "Blueforce Manual Payments for TWINT" and prepared for the WordPress.org plugin directory.
+* Removed the previous GitHub-based update mechanism; the plugin no longer makes external calls.
 * No functional changes to checkout, workflows or privacy.
 
 = 1.3.0 =

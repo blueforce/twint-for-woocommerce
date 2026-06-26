@@ -3,9 +3,10 @@
 /.gitignore    export-ignore
 /build.sh      export-ignore
 /CONTRIBUTING.md export-ignore
+/README.md     export-ignore
+/CHANGELOG.md  export-ignore
 /docs          export-ignore
 /basic         export-ignore
 /phpcs.xml.dist export-ignore
 /.github       export-ignore
-/composer.json export-ignore
 /composer.lock export-ignore
