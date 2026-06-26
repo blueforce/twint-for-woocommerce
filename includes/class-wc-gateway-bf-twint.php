@@ -64,7 +64,6 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		$this->id                 = BF_TWINT_GATEWAY_ID;
 		$this->method_title       = __( 'TWINT', 'blueforce-manual-payments-for-twint' );
 		$this->method_description = __( 'TWINT als Offline-Zahlung – ohne API, ohne Vertrag mit TWINT. Ablauf «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt.', 'blueforce-manual-payments-for-twint' );
-		$this->icon               = BF_TWINT_URL . 'assets/img/twint-logo.svg';
 		$this->has_fields         = true;
 		$this->supports           = array( 'products' );
 

@@ -25,20 +25,10 @@
 	var description = decode( settings.description || '' );
 	var mode = settings.mode || 'send';
 	var phone = decode( settings.phone || '' );
-	var icon = settings.icon || '';
 
-	// Label mit TWINT-Logo (wie im klassischen Checkout).
+	// Methodenname im Block-Checkout.
 	var Label = function () {
-		var parts = [ el( 'span', { key: 'txt' }, label ) ];
-		if ( icon ) {
-			parts.push( el( 'img', {
-				key: 'icon',
-				src: icon,
-				alt: 'TWINT',
-				style: { height: '24px', width: 'auto', marginLeft: '8px' },
-			} ) );
-		}
-		return el( 'span', { style: { display: 'inline-flex', alignItems: 'center' } }, parts );
+		return el( 'span', null, label );
 	};
 
 	var Content = function ( props ) {
