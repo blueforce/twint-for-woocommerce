@@ -4,11 +4,11 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Manual TWINT payment method for WooCommerce – no API and no contract with TWINT required. Incoming payments are confirmed by hand.
+Manual TWINT payment method for WooCommerce – no TWINT API and no acquiring contract needed. Incoming payments are confirmed by hand.
 
 == Description ==
 
@@ -41,7 +41,7 @@ In both cases the order is set to "On hold" and the incoming payment is confirme
 
 = Do I need a contract with TWINT? =
 
-No. This plugin uses the manual TWINT process and requires neither an acquiring contract nor a payment service provider.
+The plugin itself needs no TWINT API key, acquiring contract or payment service provider – it uses the manual TWINT process. Please note that the terms of your TWINT, bank and merchant account still apply: if you accept payments commercially, check your own TWINT and bank conditions for business use.
 
 = Is the payment verified automatically? =
 
@@ -60,6 +60,11 @@ Only in the "I request" workflow: the TWINT mobile number the customer enters at
 In the "I request" workflow the plugin stores the TWINT mobile number provided by the customer as order metadata (`_bf_twint_customer_phone`) in order to request the payment via the TWINT app. This number is included in the WooCommerce/WordPress data export and erasure tools. No data is sent to third parties and no external services are contacted; payment reconciliation is done manually in the TWINT app.
 
 == Changelog ==
+
+= 1.4.3 =
+* Wording: clarified that the plugin itself needs no TWINT API key or acquiring contract, while shop operators remain responsible for their own TWINT, bank and merchant terms for commercial use.
+* Removed "TWINT logo" phrasing from older changelog notes to avoid trademark ambiguity; the plugin icon is a custom Blueforce design.
+* Updated the translation template and metadata to the current version.
 
 = 1.4.2 =
 * Coding standards: renamed the gateway class to use the plugin prefix (BF_TWINT_Gateway).
@@ -93,14 +98,14 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 * Security: additional capability check (manage_woocommerce) when loading the admin scripts.
 
 = 1.1.1 =
-* TWINT logo as the plugin icon in the plugin list.
+* Plugin icon shown in the plugin list.
 * English translations (en_GB/en_US) added for the new admin texts (QR image selection).
 
 = 1.1.0 =
 * TWINT QR image: select directly from the media library via a button (instead of typing a URL), with preview.
 
 = 1.0.2 =
-* Block checkout: TWINT logo next to the method name and required-field marker ("*") on the mobile number.
+* Block checkout: payment method icon next to the method name and required-field marker ("*") on the mobile number.
 
 = 1.0.1 =
 * Internal improvements.

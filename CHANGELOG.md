@@ -9,6 +9,16 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.4.3] – 2026-06-26
+
+### Geändert
+- Formulierung präzisiert: Das Plugin selbst braucht keinen TWINT-API-Key und
+  keinen Acquiring-Vertrag – die TWINT-/Bank-/Merchant-Bedingungen für die
+  geschäftliche Nutzung bleiben aber Sache des Shopbetreibers.
+- «TWINT logo» aus älteren Changelog-Notizen entfernt (Trademark-Klarheit); das
+  Plugin-Icon ist ein eigenes Blueforce-Design.
+- Übersetzungsvorlage und -Metadaten auf die aktuelle Version aktualisiert.
+
 ## [1.4.2] – 2026-06-26
 
 ### Geändert
