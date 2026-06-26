@@ -63,6 +63,6 @@ jobs:
       - name: ZIP als Artefakt sichern
         uses: actions/upload-artifact@v4
         with:
-          name: twint-for-woocommerce
-          path: twint-for-woocommerce.zip
+          name: blueforce-manual-payments-for-twint
+          path: blueforce-manual-payments-for-twint.zip
           if-no-files-found: error

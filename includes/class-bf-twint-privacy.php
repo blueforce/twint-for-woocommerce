@@ -50,7 +50,7 @@ final class BF_TWINT_Privacy {
 		if ( BF_TWINT_GATEWAY_ID === $order->get_payment_method()
 			&& '' !== (string) $order->get_meta( self::META_KEY )
 		) {
-			$props['bf_twint_customer_phone'] = __( 'TWINT-Handynummer (für Zahlungsanforderung)', 'twint-for-woocommerce' );
+			$props['bf_twint_customer_phone'] = __( 'TWINT-Handynummer (für Zahlungsanforderung)', 'blueforce-manual-payments-for-twint' );
 		}
 		return $props;
 	}
@@ -92,11 +92,11 @@ final class BF_TWINT_Privacy {
 		}
 
 		$content = wpautop(
-			__( 'Wenn du im Checkout TWINT mit dem Ablauf «Ich fordere an» wählst, speichern wir die von dir angegebene TWINT-Handynummer bei deiner Bestellung. Wir verwenden sie ausschliesslich, um die Zahlung über die TWINT-App anzufordern. Die Nummer wird beim Export und bei der Löschung deiner personenbezogenen Daten berücksichtigt.', 'twint-for-woocommerce' )
+			__( 'Wenn du im Checkout TWINT mit dem Ablauf «Ich fordere an» wählst, speichern wir die von dir angegebene TWINT-Handynummer bei deiner Bestellung. Wir verwenden sie ausschliesslich, um die Zahlung über die TWINT-App anzufordern. Die Nummer wird beim Export und bei der Löschung deiner personenbezogenen Daten berücksichtigt.', 'blueforce-manual-payments-for-twint' )
 		);
 
 		wp_add_privacy_policy_content(
-			__( 'TWINT for WooCommerce', 'twint-for-woocommerce' ),
+			__( 'Blueforce Manual Payments for TWINT', 'blueforce-manual-payments-for-twint' ),
 			wp_kses_post( $content )
 		);
 	}

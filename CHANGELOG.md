@@ -9,6 +9,23 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.4.0] – 2026-06-26
+
+### Geändert
+- **Veröffentlichung im WordPress-Plugin-Verzeichnis.** Das Plugin heisst neu
+  «Blueforce Manual Payments for TWINT» (Slug `blueforce-manual-payments-for-twint`).
+  Der Name stellt die Herkunft (Blueforce) voran und nennt TWINT nur als
+  Kompatibilitätsangabe – konform mit den WordPress.org-Richtlinien zu Markennamen.
+
+### Entfernt
+- **GitHub-Update-Mechanismus** (Plugin Update Checker). Updates laufen neu
+  ausschliesslich über WordPress.org; das Plugin macht keine externen Aufrufe mehr.
+
+### Hinweis
+- Keine funktionalen Änderungen an Checkout, Abläufen, Datenschutz oder Einstellungen.
+- Wegen des neuen Slugs ist dies ein eigenständiger Plugin-Eintrag; eine bestehende
+  GitHub-Installation läuft unverändert weiter, erhält aber keine Auto-Updates mehr.
+
 ## [1.3.0] – 2026-06-23
 
 ### Hinzugefügt

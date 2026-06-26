@@ -1,14 +1,14 @@
-=== TWINT for WooCommerce ===
+=== Blueforce Manual Payments for TWINT ===
 Contributors: blueforce
-Tags: woocommerce, twint, payment, payment gateway, switzerland
+Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-TWINT als Bezahlmethode für WooCommerce – ohne API, ohne Vertrag mit TWINT. Der Zahlungseingang wird von Hand bestätigt.
+Manuelle TWINT-Bezahlmethode für WooCommerce – ohne API und ohne Vertrag mit TWINT. Der Zahlungseingang wird von Hand bestätigt.
 
 == Description ==
 
@@ -28,8 +28,8 @@ In beiden Fällen wird die Bestellung auf «In Wartestellung» gesetzt und der Z
 * Klassischer und Block-Checkout
 * Optionaler TWINT-QR-Code auf Danke-Seite und in der E-Mail
 * HPOS-kompatibel
-* Vollständig übersetzbar
-* Keine externen Abhängigkeiten, kein Tracking
+* Vollständig übersetzbar (de, en, fr_CH, it_CH)
+* Keine externen Abhängigkeiten, kein Tracking, keine «Phone-Home»-Aufrufe
 
 == Installation ==
 
@@ -49,7 +49,7 @@ Nein. Der Zahlungseingang wird in der TWINT-App geprüft und die Bestellung von 
 
 = Ist das Plugin offiziell von TWINT? =
 
-Nein. Es ist ein unabhängiges Community-Projekt von Blueforce Digital Solutions und steht in keiner Verbindung zur TWINT AG.
+Nein. Es ist ein unabhängiges Community-Projekt von Blueforce Digital Solutions und steht in keiner Verbindung zur TWINT AG. «TWINT» ist eine eingetragene Marke der TWINT AG und wird hier nur zur Beschreibung der Kompatibilität verwendet.
 
 = Welche personenbezogenen Daten werden gespeichert? =
 
@@ -57,9 +57,14 @@ Nur im Ablauf «Ich fordere an»: die vom Kunden im Checkout angegebene TWINT-Ha
 
 == Privacy ==
 
-Im Ablauf «Ich fordere an» speichert das Plugin die vom Kunden angegebene TWINT-Handynummer als Bestell-Metadatum (`_bf_twint_customer_phone`), um die Zahlung über die TWINT-App anzufordern. Diese Nummer wird vom WooCommerce-/WordPress-Datenexport und der Datenlöschung berücksichtigt. Es werden keine Daten an Dritte übermittelt; der Zahlungsabgleich erfolgt manuell in der TWINT-App. Hinweis: Für Plugin-Updates wird die GitHub-Releases-API dieses Repositorys kontaktiert (siehe Abschnitt «Automatische Updates»).
+Im Ablauf «Ich fordere an» speichert das Plugin die vom Kunden angegebene TWINT-Handynummer als Bestell-Metadatum (`_bf_twint_customer_phone`), um die Zahlung über die TWINT-App anzufordern. Diese Nummer wird vom WooCommerce-/WordPress-Datenexport und der Datenlöschung berücksichtigt. Es werden keine Daten an Dritte übermittelt und keine externen Dienste kontaktiert; der Zahlungsabgleich erfolgt manuell in der TWINT-App.
 
 == Changelog ==
+
+= 1.4.0 =
+* Veröffentlichung im WordPress-Plugin-Verzeichnis; Plugin umbenannt in «Blueforce Manual Payments for TWINT».
+* Updates laufen neu direkt über WordPress.org; der bisherige GitHub-Update-Mechanismus wurde entfernt (keine externen Aufrufe mehr).
+* Keine funktionalen Änderungen an Checkout, Abläufen oder Datenschutz.
 
 = 1.3.0 =
 * Order-Snapshot: Ablauf, Nummer, Kontoinhaber, QR-Bild und Hinweise werden pro Bestellung eingefroren – Danke-Seite, E-Mail und Backend bleiben korrekt, auch wenn die Einstellungen später geändert werden.
@@ -79,7 +84,7 @@ Im Ablauf «Ich fordere an» speichert das Plugin die vom Kunden angegebene TWIN
 * Sicherheit: zusätzlicher Berechtigungs-Check (manage_woocommerce) beim Laden der Admin-Skripte.
 
 = 1.1.1 =
-* TWINT-Logo als Plugin-Icon in der Update- und Plugin-Ansicht.
+* TWINT-Logo als Plugin-Icon in der Plugin-Ansicht.
 * Englische Übersetzungen (en_GB/en_US) für die neuen Admin-Texte (QR-Bild-Auswahl) ergänzt.
 
 = 1.1.0 =
@@ -89,7 +94,12 @@ Im Ablauf «Ich fordere an» speichert das Plugin die vom Kunden angegebene TWIN
 * Block-Checkout: TWINT-Logo neben dem Methodennamen und Pflichtfeld-Markierung («*») bei der Handynummer.
 
 = 1.0.1 =
-* Automatische Updates direkt im WordPress-Backend (1-Klick) über die GitHub-Releases.
+* Interne Verbesserungen.
 
 = 1.0.0 =
 * Erste Veröffentlichung.
+
+== Upgrade Notice ==
+
+= 1.4.0 =
+Veröffentlichung im WordPress-Plugin-Verzeichnis. Updates laufen neu über WordPress.org; keine externen Aufrufe mehr. Keine funktionalen Änderungen.

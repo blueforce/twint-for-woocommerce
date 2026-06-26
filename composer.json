@@ -1,6 +1,6 @@
 {
-	"name": "blueforce/twint-for-woocommerce",
-	"description": "Entwicklungs-Tooling (Coding Standards / Kompatibilität) für das Plugin «TWINT for WooCommerce». Die Laufzeit des Plugins hat keine Composer-Abhängigkeiten.",
+	"name": "blueforce/blueforce-manual-payments-for-twint",
+	"description": "Entwicklungs-Tooling (Coding Standards / Kompatibilität) für das Plugin «Blueforce Manual Payments for TWINT». Die Laufzeit des Plugins hat keine Composer-Abhängigkeiten.",
 	"license": "GPL-2.0-or-later",
 	"require": {
 		"php": ">=7.4"
@@ -19,7 +19,7 @@
 	"scripts": {
 		"phpcs": "@php vendor/bin/phpcs",
 		"phpcbf": "@php vendor/bin/phpcbf",
-		"lint": "find . -name '*.php' -not -path './vendor/*' -not -path './includes/plugin-update-checker/*' -not -path './basic/*' -print0 | xargs -0 -n1 -P4 php -l"
+		"lint": "find . -name '*.php' -not -path './vendor/*' -not -path './basic/*' -print0 | xargs -0 -n1 -P4 php -l"
 	},
 	"scripts-descriptions": {
 		"phpcs": "WordPress Coding Standards / PHPCompatibility prüfen.",

@@ -9,8 +9,7 @@ Thumbs.db
 
 # Abhängigkeiten / Build
 node_modules/
-# Nur ein vendor/ im Repo-Root ignorieren – NICHT das vendor/ der eingebetteten
-# Update-Bibliothek (includes/plugin-update-checker/vendor/), das mitgeliefert werden muss.
+# Composer-Dev-Abhängigkeiten (nur lokal / CI, nicht im distribuierten Plugin).
 /vendor/
 /composer.lock
 *.zip

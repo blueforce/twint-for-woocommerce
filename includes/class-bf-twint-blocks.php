@@ -105,7 +105,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 		);
 
 		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'bf-twint-blocks', 'twint-for-woocommerce', BF_TWINT_PATH . 'languages' );
+			wp_set_script_translations( 'bf-twint-blocks', 'blueforce-manual-payments-for-twint', BF_TWINT_PATH . 'languages' );
 		}
 
 		return array( 'bf-twint-blocks' );
@@ -118,7 +118,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 	 */
 	public function get_payment_method_data() {
 		return array(
-			'title'       => isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'TWINT', 'twint-for-woocommerce' ),
+			'title'       => isset( $this->settings['title'] ) ? $this->settings['title'] : __( 'TWINT', 'blueforce-manual-payments-for-twint' ),
 			'description' => isset( $this->settings['description'] ) ? $this->settings['description'] : '',
 			'mode'        => isset( $this->settings['mode'] ) ? $this->settings['mode'] : 'send',
 			'phone'       => isset( $this->settings['phone'] ) ? $this->settings['phone'] : '',
@@ -154,7 +154,7 @@ final class BF_TWINT_Blocks_Support extends AbstractPaymentMethodType {
 				$valid  = $digits >= 6 && $digits <= 15;
 			}
 			if ( ! $valid ) {
-				throw new \Exception( esc_html__( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'twint-for-woocommerce' ) );
+				throw new \Exception( esc_html__( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'blueforce-manual-payments-for-twint' ) );
 			}
 			if ( $gateway ) {
 				$phone = $gateway->normalize_phone( $phone );

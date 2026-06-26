@@ -62,8 +62,8 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->id                 = BF_TWINT_GATEWAY_ID;
-		$this->method_title       = __( 'TWINT', 'twint-for-woocommerce' );
-		$this->method_description = __( 'TWINT als Offline-Zahlung – ohne API, ohne Vertrag mit TWINT. Ablauf «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt.', 'twint-for-woocommerce' );
+		$this->method_title       = __( 'TWINT', 'blueforce-manual-payments-for-twint' );
+		$this->method_description = __( 'TWINT als Offline-Zahlung – ohne API, ohne Vertrag mit TWINT. Ablauf «Kunde sendet» (deine TWINT-Nummer/QR wird angezeigt) oder «Ich fordere an» (Kunde gibt seine TWINT-Nummer an). Der Zahlungseingang wird von Hand bestätigt.', 'blueforce-manual-payments-for-twint' );
 		$this->icon               = BF_TWINT_URL . 'assets/img/twint-logo.svg';
 		$this->has_fields         = true;
 		$this->supports           = array( 'products' );
@@ -71,7 +71,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		$this->init_form_fields();
 		$this->init_settings();
 
-		$this->title        = $this->get_option( 'title', __( 'TWINT', 'twint-for-woocommerce' ) );
+		$this->title        = $this->get_option( 'title', __( 'TWINT', 'blueforce-manual-payments-for-twint' ) );
 		$this->description  = $this->get_option( 'description' );
 		$this->mode         = $this->get_option( 'mode', 'send' );
 		$this->phone        = $this->get_option( 'phone' );
@@ -161,7 +161,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		echo '<div class="notice notice-warning"><p>';
 		printf(
 			/* translators: %s: URL to the TWINT settings page. */
-			wp_kses_post( __( '<strong>TWINT for WooCommerce:</strong> Der Ablauf «Kunde sendet» ist aktiv, aber es ist weder eine TWINT-Handynummer noch ein QR-Code hinterlegt. Die Bezahlmethode wird im Checkout ausgeblendet, bis du die <a href="%s">Angaben ergänzt</a>.', 'twint-for-woocommerce' ) ),
+			wp_kses_post( __( '<strong>Blueforce Manual Payments for TWINT:</strong> Der Ablauf «Kunde sendet» ist aktiv, aber es ist weder eine TWINT-Handynummer noch ein QR-Code hinterlegt. Die Bezahlmethode wird im Checkout ausgeblendet, bis du die <a href="%s">Angaben ergänzt</a>.', 'blueforce-manual-payments-for-twint' ) ),
 			esc_url( $url )
 		);
 		echo '</p></div>';
@@ -173,60 +173,60 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled'      => array(
-				'title'   => __( 'Aktivieren', 'twint-for-woocommerce' ),
+				'title'   => __( 'Aktivieren', 'blueforce-manual-payments-for-twint' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'TWINT als Bezahlmethode aktivieren', 'twint-for-woocommerce' ),
+				'label'   => __( 'TWINT als Bezahlmethode aktivieren', 'blueforce-manual-payments-for-twint' ),
 				'default' => 'no',
 			),
 			'title'        => array(
-				'title'       => __( 'Titel', 'twint-for-woocommerce' ),
+				'title'       => __( 'Titel', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'text',
-				'description' => __( 'Im Checkout angezeigter Name.', 'twint-for-woocommerce' ),
-				'default'     => __( 'TWINT', 'twint-for-woocommerce' ),
+				'description' => __( 'Im Checkout angezeigter Name.', 'blueforce-manual-payments-for-twint' ),
+				'default'     => __( 'TWINT', 'blueforce-manual-payments-for-twint' ),
 				'desc_tip'    => true,
 			),
 			'description'  => array(
-				'title'       => __( 'Beschreibung', 'twint-for-woocommerce' ),
+				'title'       => __( 'Beschreibung', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'textarea',
-				'description' => __( 'Kurztext unter dem Methodennamen im Checkout.', 'twint-for-woocommerce' ),
-				'default'     => __( 'Bezahle einfach und sicher mit TWINT.', 'twint-for-woocommerce' ),
+				'description' => __( 'Kurztext unter dem Methodennamen im Checkout.', 'blueforce-manual-payments-for-twint' ),
+				'default'     => __( 'Bezahle einfach und sicher mit TWINT.', 'blueforce-manual-payments-for-twint' ),
 			),
 			'mode'         => array(
-				'title'       => __( 'Ablauf', 'twint-for-woocommerce' ),
+				'title'       => __( 'Ablauf', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'select',
-				'description' => __( '«Kunde sendet»: deine TWINT-Nummer wird angezeigt. «Ich fordere an»: Kunde gibt seine TWINT-Nummer an, du forderst den Betrag.', 'twint-for-woocommerce' ),
+				'description' => __( '«Kunde sendet»: deine TWINT-Nummer wird angezeigt. «Ich fordere an»: Kunde gibt seine TWINT-Nummer an, du forderst den Betrag.', 'blueforce-manual-payments-for-twint' ),
 				'default'     => 'send',
 				'options'     => array(
-					'send'    => __( 'Kunde sendet an meine TWINT-Nummer', 'twint-for-woocommerce' ),
-					'request' => __( 'Ich fordere den Betrag an (Kunde gibt Nummer an)', 'twint-for-woocommerce' ),
+					'send'    => __( 'Kunde sendet an meine TWINT-Nummer', 'blueforce-manual-payments-for-twint' ),
+					'request' => __( 'Ich fordere den Betrag an (Kunde gibt Nummer an)', 'blueforce-manual-payments-for-twint' ),
 				),
 				'desc_tip'    => true,
 			),
 			'phone'        => array(
-				'title'       => __( 'Deine TWINT-Handynummer', 'twint-for-woocommerce' ),
+				'title'       => __( 'Deine TWINT-Handynummer', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'text',
-				'description' => __( 'Nur bei «Kunde sendet»: Nummer, an die der Betrag gesendet wird (z. B. +41 79 123 45 67).', 'twint-for-woocommerce' ),
+				'description' => __( 'Nur bei «Kunde sendet»: Nummer, an die der Betrag gesendet wird (z. B. +41 79 123 45 67).', 'blueforce-manual-payments-for-twint' ),
 				'default'     => '',
 				'desc_tip'    => true,
 			),
 			'account_name' => array(
-				'title'       => __( 'Name des Kontoinhabers', 'twint-for-woocommerce' ),
+				'title'       => __( 'Name des Kontoinhabers', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'text',
-				'description' => __( 'Optional. Wird dem Kunden zur Kontrolle angezeigt (z. B. Firmen- oder Personenname).', 'twint-for-woocommerce' ),
+				'description' => __( 'Optional. Wird dem Kunden zur Kontrolle angezeigt (z. B. Firmen- oder Personenname).', 'blueforce-manual-payments-for-twint' ),
 				'default'     => '',
 				'desc_tip'    => true,
 			),
 			'qr_image'     => array(
-				'title'       => __( 'TWINT-QR-Bild', 'twint-for-woocommerce' ),
+				'title'       => __( 'TWINT-QR-Bild', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'qr_image',
-				'description' => __( 'Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild und wähle ihn hier aus der Mediathek. Der Kunde kann ihn dann direkt scannen.', 'twint-for-woocommerce' ),
+				'description' => __( 'Optional, nur bei «Kunde sendet». Lade in der TWINT-App unter «Geld empfangen» deinen QR-Code, speichere ihn als Bild und wähle ihn hier aus der Mediathek. Der Kunde kann ihn dann direkt scannen.', 'blueforce-manual-payments-for-twint' ),
 				'default'     => '',
 			),
 			'instructions' => array(
-				'title'       => __( 'Zusätzliche Hinweise', 'twint-for-woocommerce' ),
+				'title'       => __( 'Zusätzliche Hinweise', 'blueforce-manual-payments-for-twint' ),
 				'type'        => 'textarea',
-				'description' => __( 'Erscheint auf der Danke-Seite und in der Bestell-E-Mail.', 'twint-for-woocommerce' ),
-				'default'     => __( 'Wir bearbeiten deine Bestellung, sobald die Zahlung eingegangen ist.', 'twint-for-woocommerce' ),
+				'description' => __( 'Erscheint auf der Danke-Seite und in der Bestell-E-Mail.', 'blueforce-manual-payments-for-twint' ),
+				'default'     => __( 'Wir bearbeiten deine Bestellung, sobald die Zahlung eingegangen ist.', 'blueforce-manual-payments-for-twint' ),
 			),
 		);
 	}
@@ -270,8 +270,8 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			'bf-twint-admin-qr',
 			'bfTwintQr',
 			array(
-				'title'  => __( 'TWINT-QR-Bild wählen', 'twint-for-woocommerce' ),
-				'button' => __( 'Dieses Bild verwenden', 'twint-for-woocommerce' ),
+				'title'  => __( 'TWINT-QR-Bild wählen', 'blueforce-manual-payments-for-twint' ),
+				'button' => __( 'Dieses Bild verwenden', 'blueforce-manual-payments-for-twint' ),
 			)
 		);
 	}
@@ -320,8 +320,8 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
 					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="url" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $value ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" />
-					<button type="button" class="button bf-twint-qr-upload" data-target="<?php echo esc_attr( $field_key ); ?>"><?php esc_html_e( 'Bild auswählen', 'twint-for-woocommerce' ); ?></button>
-					<button type="button" class="button bf-twint-qr-remove" data-target="<?php echo esc_attr( $field_key ); ?>" style="<?php echo $value ? '' : 'display:none'; ?>"><?php esc_html_e( 'Entfernen', 'twint-for-woocommerce' ); ?></button>
+					<button type="button" class="button bf-twint-qr-upload" data-target="<?php echo esc_attr( $field_key ); ?>"><?php esc_html_e( 'Bild auswählen', 'blueforce-manual-payments-for-twint' ); ?></button>
+					<button type="button" class="button bf-twint-qr-remove" data-target="<?php echo esc_attr( $field_key ); ?>" style="<?php echo $value ? '' : 'display:none'; ?>"><?php esc_html_e( 'Entfernen', 'blueforce-manual-payments-for-twint' ); ?></button>
 					<?php echo $this->get_description_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<div class="bf-twint-qr-preview">
 						<?php if ( $value ) : ?>
@@ -356,16 +356,16 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 
 		if ( 'request' === $this->mode ) {
 			echo '<p class="form-row form-row-wide bf-twint-field">';
-			echo '<label for="bf_twint_phone">' . esc_html__( 'TWINT-Handynummer', 'twint-for-woocommerce' ) . ' <abbr class="required" title="' . esc_attr__( 'Pflichtfeld', 'twint-for-woocommerce' ) . '">*</abbr></label>';
+			echo '<label for="bf_twint_phone">' . esc_html__( 'TWINT-Handynummer', 'blueforce-manual-payments-for-twint' ) . ' <abbr class="required" title="' . esc_attr__( 'Pflichtfeld', 'blueforce-manual-payments-for-twint' ) . '">*</abbr></label>';
 			echo '<input type="tel" id="bf_twint_phone" name="bf_twint_phone" autocomplete="tel" placeholder="+41 79 123 45 67" required aria-required="true" aria-describedby="bf_twint_phone_hint" />';
-			echo '<span id="bf_twint_phone_hint" class="bf-twint-hint">' . esc_html__( 'An diese Nummer senden wir dir eine TWINT-Zahlungsanforderung.', 'twint-for-woocommerce' ) . '</span>';
+			echo '<span id="bf_twint_phone_hint" class="bf-twint-hint">' . esc_html__( 'An diese Nummer senden wir dir eine TWINT-Zahlungsanforderung.', 'blueforce-manual-payments-for-twint' ) . '</span>';
 			echo '</p>';
 		} elseif ( $this->phone ) {
 			printf(
 				'<p style="margin:.5em 0 0">%s</p>',
 				sprintf(
 					/* translators: %s: TWINT phone number of the shop. */
-					esc_html__( 'Sende den Betrag via TWINT an %s – die genauen Angaben erhältst du nach der Bestellung.', 'twint-for-woocommerce' ),
+					esc_html__( 'Sende den Betrag via TWINT an %s – die genauen Angaben erhältst du nach der Bestellung.', 'blueforce-manual-payments-for-twint' ),
 					'<strong>' . esc_html( $this->phone ) . '</strong>'
 				)
 			);
@@ -381,7 +381,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		if ( 'request' === $this->mode ) {
 			$phone = isset( $_POST['bf_twint_phone'] ) ? trim( wc_clean( wp_unslash( $_POST['bf_twint_phone'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
 			if ( ! $this->is_valid_phone( $phone ) ) {
-				wc_add_notice( __( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'twint-for-woocommerce' ), 'error' );
+				wc_add_notice( __( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'blueforce-manual-payments-for-twint' ), 'error' );
 				return false;
 			}
 		}
@@ -493,7 +493,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 
 			// Defensive Nachprüfung: ohne gültige Nummer keine Bestellung anlegen.
 			if ( ! $this->is_valid_phone( $phone ) ) {
-				wc_add_notice( __( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'twint-for-woocommerce' ), 'error' );
+				wc_add_notice( __( 'Bitte gib eine gültige TWINT-Handynummer an, damit wir die Zahlung anfordern können.', 'blueforce-manual-payments-for-twint' ), 'error' );
 				return array( 'result' => 'failure' );
 			}
 
@@ -504,18 +504,18 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 				'on-hold',
 				sprintf(
 					/* translators: %s: customer TWINT phone number. */
-					__( 'TWINT: Zahlungsanforderung an %s senden.', 'twint-for-woocommerce' ),
-					$phone ? $phone : __( '(keine Nummer angegeben)', 'twint-for-woocommerce' )
+					__( 'TWINT: Zahlungsanforderung an %s senden.', 'blueforce-manual-payments-for-twint' ),
+					$phone ? $phone : __( '(keine Nummer angegeben)', 'blueforce-manual-payments-for-twint' )
 				)
 			);
 		} else {
 			// Defensive Nachprüfung: ohne Zahlungsziel (Nummer/QR) keine Bestellung
 			// anlegen – normalerweise blendet is_available() TWINT bereits aus.
 			if ( ! $this->has_send_target() ) {
-				wc_add_notice( __( 'TWINT ist derzeit nicht vollständig konfiguriert. Bitte wähle eine andere Zahlungsart oder versuche es später erneut.', 'twint-for-woocommerce' ), 'error' );
+				wc_add_notice( __( 'TWINT ist derzeit nicht vollständig konfiguriert. Bitte wähle eine andere Zahlungsart oder versuche es später erneut.', 'blueforce-manual-payments-for-twint' ), 'error' );
 				return array( 'result' => 'failure' );
 			}
-			$order->update_status( 'on-hold', __( 'TWINT: Warten auf Zahlungseingang (Kunde sendet).', 'twint-for-woocommerce' ) );
+			$order->update_status( 'on-hold', __( 'TWINT: Warten auf Zahlungseingang (Kunde sendet).', 'blueforce-manual-payments-for-twint' ) );
 		}
 
 		$order->save();
@@ -552,21 +552,21 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			$phone = $order->get_meta( '_bf_twint_customer_phone' );
 			$out  .= '<p>' . sprintf(
 				/* translators: %s: customer phone number (may be empty). */
-				wp_kses_post( __( 'Wir senden dir in Kürze eine <strong>TWINT-Zahlungsanforderung</strong>%s. Bitte bestätige die Zahlung in deiner TWINT-App.', 'twint-for-woocommerce' ) ),
+				wp_kses_post( __( 'Wir senden dir in Kürze eine <strong>TWINT-Zahlungsanforderung</strong>%s. Bitte bestätige die Zahlung in deiner TWINT-App.', 'blueforce-manual-payments-for-twint' ) ),
 				$phone ? ' ' . sprintf(
 					/* translators: %s: phone number. */
-					esc_html__( 'an %s', 'twint-for-woocommerce' ),
+					esc_html__( 'an %s', 'blueforce-manual-payments-for-twint' ),
 					'<strong>' . esc_html( $phone ) . '</strong>'
 				) : ''
 			) . '</p>';
 		} else {
 			$out .= '<p>' . sprintf(
 				/* translators: 1: order total, 2: shop TWINT phone (may be empty). */
-				wp_kses_post( __( 'Bitte sende %1$s via <strong>TWINT</strong>%2$s.', 'twint-for-woocommerce' ) ),
+				wp_kses_post( __( 'Bitte sende %1$s via <strong>TWINT</strong>%2$s.', 'blueforce-manual-payments-for-twint' ) ),
 				'<strong>' . wp_kses_post( $order->get_formatted_order_total() ) . '</strong>',
 				$shop_phone ? ' ' . sprintf(
 					/* translators: %s: phone number. */
-					esc_html__( 'an %s', 'twint-for-woocommerce' ),
+					esc_html__( 'an %s', 'blueforce-manual-payments-for-twint' ),
 					'<strong>' . esc_html( $shop_phone ) . '</strong>'
 				) : ''
 			) . '</p>';
@@ -574,7 +574,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			if ( $account_name ) {
 				$out .= '<p>' . sprintf(
 					/* translators: %s: account holder name. */
-					esc_html__( 'Kontoinhaber: %s', 'twint-for-woocommerce' ),
+					esc_html__( 'Kontoinhaber: %s', 'blueforce-manual-payments-for-twint' ),
 					'<strong>' . esc_html( $account_name ) . '</strong>'
 				) . '</p>';
 			}
@@ -583,20 +583,20 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			if ( 'thankyou' === $context ) {
 				$copy_button = ' <button type="button" class="button bf-twint-copy"'
 					. ' data-bf-twint-copy="' . esc_attr( $order->get_order_number() ) . '"'
-					. ' data-copied="' . esc_attr__( 'Kopiert!', 'twint-for-woocommerce' ) . '"'
+					. ' data-copied="' . esc_attr__( 'Kopiert!', 'blueforce-manual-payments-for-twint' ) . '"'
 					. ' aria-live="polite"'
-					. ' aria-label="' . esc_attr__( 'Bestellnummer kopieren', 'twint-for-woocommerce' ) . '">'
-					. esc_html__( 'Kopieren', 'twint-for-woocommerce' ) . '</button>';
+					. ' aria-label="' . esc_attr__( 'Bestellnummer kopieren', 'blueforce-manual-payments-for-twint' ) . '">'
+					. esc_html__( 'Kopieren', 'blueforce-manual-payments-for-twint' ) . '</button>';
 			}
 
 			$out .= '<p>' . sprintf(
 				/* translators: %s: order number. */
-				wp_kses_post( __( 'Verwende deine Bestellnummer %s als Mitteilung.', 'twint-for-woocommerce' ) ),
+				wp_kses_post( __( 'Verwende deine Bestellnummer %s als Mitteilung.', 'blueforce-manual-payments-for-twint' ) ),
 				'<strong>#' . esc_html( $order->get_order_number() ) . '</strong>'
 			) . $copy_button . '</p>';
 
 			if ( $qr_image ) {
-				$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT-QR-Code', 'twint-for-woocommerce' ) . '" class="bf-twint-qr" /></p>';
+				$out .= '<p><img src="' . esc_url( $qr_image ) . '" alt="' . esc_attr__( 'TWINT-QR-Code', 'blueforce-manual-payments-for-twint' ) . '" class="bf-twint-qr" /></p>';
 			}
 		}
 
@@ -626,36 +626,36 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			$lines[] = $phone
 				? sprintf(
 					/* translators: %s: customer TWINT phone number. */
-					__( 'Wir senden dir in Kürze eine TWINT-Zahlungsanforderung an %s. Bitte bestätige die Zahlung in deiner TWINT-App.', 'twint-for-woocommerce' ),
+					__( 'Wir senden dir in Kürze eine TWINT-Zahlungsanforderung an %s. Bitte bestätige die Zahlung in deiner TWINT-App.', 'blueforce-manual-payments-for-twint' ),
 					$phone
 				)
-				: __( 'Wir senden dir in Kürze eine TWINT-Zahlungsanforderung. Bitte bestätige die Zahlung in deiner TWINT-App.', 'twint-for-woocommerce' );
+				: __( 'Wir senden dir in Kürze eine TWINT-Zahlungsanforderung. Bitte bestätige die Zahlung in deiner TWINT-App.', 'blueforce-manual-payments-for-twint' );
 		} else {
 			$total   = wp_strip_all_tags( $order->get_formatted_order_total() );
 			$lines[] = $shop_phone
 				? sprintf(
 					/* translators: 1: order total, 2: shop TWINT phone number. */
-					__( 'Bitte sende %1$s via TWINT an %2$s.', 'twint-for-woocommerce' ),
+					__( 'Bitte sende %1$s via TWINT an %2$s.', 'blueforce-manual-payments-for-twint' ),
 					$total,
 					$shop_phone
 				)
 				: sprintf(
 					/* translators: %s: order total. */
-					__( 'Bitte sende %s via TWINT.', 'twint-for-woocommerce' ),
+					__( 'Bitte sende %s via TWINT.', 'blueforce-manual-payments-for-twint' ),
 					$total
 				);
 
 			if ( $account_name ) {
 				$lines[] = sprintf(
 					/* translators: %s: account holder name. */
-					__( 'Kontoinhaber: %s', 'twint-for-woocommerce' ),
+					__( 'Kontoinhaber: %s', 'blueforce-manual-payments-for-twint' ),
 					$account_name
 				);
 			}
 
 			$lines[] = sprintf(
 				/* translators: %s: order number. */
-				__( 'Verwende deine Bestellnummer %s als Mitteilung.', 'twint-for-woocommerce' ),
+				__( 'Verwende deine Bestellnummer %s als Mitteilung.', 'blueforce-manual-payments-for-twint' ),
 				'#' . $order->get_order_number()
 			);
 			// Der QR-Code wird in der Plain-Text-Mail bewusst weggelassen (nicht darstellbar).
@@ -741,27 +741,27 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 
 		if ( 'request' === $mode ) {
 			$phone = $order->get_meta( '_bf_twint_customer_phone' );
-			echo '<p><strong>' . esc_html__( 'TWINT-Handynummer (Kunde):', 'twint-for-woocommerce' ) . '</strong> ' . ( $phone ? esc_html( $phone ) : '<em>' . esc_html__( 'keine', 'twint-for-woocommerce' ) . '</em>' ) . '</p>';
-			echo '<p class="bf-twint-steps"><strong>' . esc_html__( 'Vorgehen:', 'twint-for-woocommerce' ) . '</strong><br>';
+			echo '<p><strong>' . esc_html__( 'TWINT-Handynummer (Kunde):', 'blueforce-manual-payments-for-twint' ) . '</strong> ' . ( $phone ? esc_html( $phone ) : '<em>' . esc_html__( 'keine', 'blueforce-manual-payments-for-twint' ) . '</em>' ) . '</p>';
+			echo '<p class="bf-twint-steps"><strong>' . esc_html__( 'Vorgehen:', 'blueforce-manual-payments-for-twint' ) . '</strong><br>';
 			echo sprintf(
 				/* translators: 1: amount, 2: order number. */
-				esc_html__( '1. In der TWINT-App den Betrag (%1$s) an diese Nummer anfordern – Bestellnummer %2$s als Mitteilung.', 'twint-for-woocommerce' ),
+				esc_html__( '1. In der TWINT-App den Betrag (%1$s) an diese Nummer anfordern – Bestellnummer %2$s als Mitteilung.', 'blueforce-manual-payments-for-twint' ),
 				'<strong>' . esc_html( $total ) . '</strong>',
 				'<strong>#' . esc_html( $order->get_order_number() ) . '</strong>'
 			) . '<br>';
-			echo esc_html__( '2. Nach Zahlungseingang: Status auf «In Bearbeitung» setzen.', 'twint-for-woocommerce' ) . '<br>';
-			echo esc_html__( '3. Nach Versand: «Abgeschlossen».', 'twint-for-woocommerce' ) . '</p>';
+			echo esc_html__( '2. Nach Zahlungseingang: Status auf «In Bearbeitung» setzen.', 'blueforce-manual-payments-for-twint' ) . '<br>';
+			echo esc_html__( '3. Nach Versand: «Abgeschlossen».', 'blueforce-manual-payments-for-twint' ) . '</p>';
 		} else {
-			echo '<p><strong>' . esc_html__( 'TWINT-Ablauf:', 'twint-for-woocommerce' ) . '</strong> ' . esc_html__( 'Kunde sendet den Betrag selbst.', 'twint-for-woocommerce' ) . '</p>';
-			echo '<p class="bf-twint-steps"><strong>' . esc_html__( 'Vorgehen:', 'twint-for-woocommerce' ) . '</strong><br>';
+			echo '<p><strong>' . esc_html__( 'TWINT-Ablauf:', 'blueforce-manual-payments-for-twint' ) . '</strong> ' . esc_html__( 'Kunde sendet den Betrag selbst.', 'blueforce-manual-payments-for-twint' ) . '</p>';
+			echo '<p class="bf-twint-steps"><strong>' . esc_html__( 'Vorgehen:', 'blueforce-manual-payments-for-twint' ) . '</strong><br>';
 			echo sprintf(
 				/* translators: 1: amount, 2: order number. */
-				esc_html__( '1. Prüfe in der TWINT-App den Eingang von %1$s mit Mitteilung %2$s.', 'twint-for-woocommerce' ),
+				esc_html__( '1. Prüfe in der TWINT-App den Eingang von %1$s mit Mitteilung %2$s.', 'blueforce-manual-payments-for-twint' ),
 				'<strong>' . esc_html( $total ) . '</strong>',
 				'<strong>#' . esc_html( $order->get_order_number() ) . '</strong>'
 			) . '<br>';
-			echo esc_html__( '2. Nach Zahlungseingang: Status auf «In Bearbeitung» setzen.', 'twint-for-woocommerce' ) . '<br>';
-			echo esc_html__( '3. Nach Versand: «Abgeschlossen».', 'twint-for-woocommerce' ) . '</p>';
+			echo esc_html__( '2. Nach Zahlungseingang: Status auf «In Bearbeitung» setzen.', 'blueforce-manual-payments-for-twint' ) . '<br>';
+			echo esc_html__( '3. Nach Versand: «Abgeschlossen».', 'blueforce-manual-payments-for-twint' ) . '</p>';
 		}
 
 		// Ein-Klick-Bestätigung: Bestellung als bezahlt freigeben (nur solange offen
@@ -772,7 +772,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			echo '<input type="hidden" name="action" value="bf_twint_mark_paid" />';
 			echo '<input type="hidden" name="order_id" value="' . esc_attr( $order->get_id() ) . '" />';
 			wp_nonce_field( 'bf_twint_mark_paid_' . $order->get_id() );
-			echo '<button type="submit" class="button button-primary">' . esc_html__( 'Zahlung erhalten – Bestellung freigeben', 'twint-for-woocommerce' ) . '</button>';
+			echo '<button type="submit" class="button button-primary">' . esc_html__( 'Zahlung erhalten – Bestellung freigeben', 'blueforce-manual-payments-for-twint' ) . '</button>';
 			echo '</form>';
 		}
 
@@ -794,7 +794,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		check_admin_referer( 'bf_twint_mark_paid_' . $order_id );
 
 		if ( ! current_user_can( 'edit_shop_orders' ) && ! current_user_can( 'edit_shop_order', $order_id ) ) {
-			wp_die( esc_html__( 'Du hast keine Berechtigung, diese Bestellung zu bearbeiten.', 'twint-for-woocommerce' ) );
+			wp_die( esc_html__( 'Du hast keine Berechtigung, diese Bestellung zu bearbeiten.', 'blueforce-manual-payments-for-twint' ) );
 		}
 
 		$order = $order_id ? wc_get_order( $order_id ) : false;
@@ -804,11 +804,11 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 			&& $order->has_status( array( 'on-hold', 'pending' ) )
 		) {
 			$user = wp_get_current_user();
-			$by   = ( $user && $user->exists() ) ? $user->display_name : __( 'unbekannt', 'twint-for-woocommerce' );
+			$by   = ( $user && $user->exists() ) ? $user->display_name : __( 'unbekannt', 'blueforce-manual-payments-for-twint' );
 			$order->add_order_note(
 				sprintf(
 					/* translators: %s: display name of the admin who confirmed the payment. */
-					__( 'TWINT-Zahlung von Hand als erhalten bestätigt (durch %s).', 'twint-for-woocommerce' ),
+					__( 'TWINT-Zahlung von Hand als erhalten bestätigt (durch %s).', 'blueforce-manual-payments-for-twint' ),
 					$by
 				),
 				false

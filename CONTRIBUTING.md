@@ -1,6 +1,6 @@
 # Mitwirken & Versionierung
 
-Danke für dein Interesse an *TWINT for WooCommerce*. Dieses Dokument hält fest, **wie versioniert wird**, **wie ein Release entsteht** und **wie der Changelog gepflegt wird**.
+Danke für dein Interesse an *Blueforce Manual Payments for TWINT*. Dieses Dokument hält fest, **wie versioniert wird**, **wie ein Release entsteht** und **wie der Changelog gepflegt wird**.
 
 ## Versionsschema
 
@@ -20,26 +20,29 @@ Das Plugin folgt **[Semantic Versioning](https://semver.org/lang/de/)** im Forma
 
 ## Release-Prozess
 
-1. **Version erhöhen** an genau diesen vier Stellen (müssen übereinstimmen):
-   - `twint-for-woocommerce.php` → Header `Version:` **und** Konstante `BF_TWINT_VERSION`
+Verteilung läuft über das **WordPress.org-Plugin-Verzeichnis** (SVN). GitHub bleibt das Quellcode-Repo.
+
+1. **Version erhöhen** an genau diesen Stellen (müssen übereinstimmen):
+   - `blueforce-manual-payments-for-twint.php` → Header `Version:` **und** Konstante `BF_TWINT_VERSION`
    - `readme.txt` → `Stable tag:`
    - `CHANGELOG.md` → neuer Versionsabschnitt (siehe unten)
 2. **Committen** und Tag setzen:
    ```bash
    git commit -am "x.y.z: <kurzbeschrieb>"
-   git tag -a x.y.z -m "TWINT for WooCommerce x.y.z"
+   git tag -a x.y.z -m "Blueforce Manual Payments for TWINT x.y.z"
    git push origin main && git push origin x.y.z
    ```
-3. **Release-ZIP bauen:**
+3. **Installierbares ZIP zum Testen bauen:**
    ```bash
    ./build.sh x.y.z
    ```
-   Das erzeugt `twint-for-woocommerce.zip` mit korrektem Ordnernamen und prüft, dass alle Pflicht-Bestandteile (inkl. Update-Bibliothek) enthalten sind.
-4. **GitHub-Release veröffentlichen** – das ZIP **muss** als Asset angehängt sein:
-   ```bash
-   gh release create x.y.z twint-for-woocommerce.zip --title "x.y.z – <Titel>" --notes "..."
-   ```
-   > ⚠️ Ohne angehängtes `twint-for-woocommerce.zip` findet der [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker) nichts – die 1-Klick-Aktualisierung im Backend würde dann nicht funktionieren.
+   Das erzeugt `blueforce-manual-payments-for-twint.zip` mit korrektem Ordnernamen und prüft die Pflicht-Bestandteile. Vor dem Verzeichnis-Release lokal installieren und durchklicken.
+4. **Auf WordPress.org veröffentlichen** (SVN-Repo `https://plugins.svn.wordpress.org/blueforce-manual-payments-for-twint/`):
+   - `trunk/` mit dem aktuellen Stand abgleichen (Plugin-Dateien, `readme.txt`, `assets/`).
+   - Den Stand nach `tags/x.y.z/` kopieren.
+   - `Stable tag:` in `trunk/readme.txt` auf `x.y.z` setzen – **erst dieser Wert macht die Version live**.
+   - `svn ci -m "Release x.y.z"`.
+   > Verzeichnis-Assets (Banner, Icon, Screenshots) liegen im SVN unter `assets/`, **nicht** im Plugin-ZIP.
 
 ## Changelog pflegen
 
@@ -50,8 +53,8 @@ Das Plugin folgt **[Semantic Versioning](https://semver.org/lang/de/)** im Forma
 
 ## Code-Stil
 
-- WordPress Coding Standards (Tabs, `esc_*`/`wp_kses_*` beim Ausgeben, Text-Domain `twint-for-woocommerce` bei allen Strings).
-- Keine externen Laufzeit-Abhängigkeiten ausser der eingebetteten Update-Bibliothek; kein Build-Step fürs Plugin selbst.
+- WordPress Coding Standards (Tabs, `esc_*`/`wp_kses_*` beim Ausgeben, Text-Domain `blueforce-manual-payments-for-twint` bei allen Strings).
+- Keine externen Laufzeit-Abhängigkeiten, kein Tracking, kein «Phone-Home»; kein Build-Step fürs Plugin selbst.
 
 ## Lokale Qualitätsprüfung
 

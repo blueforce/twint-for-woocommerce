@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 #
-# Baut ein sauberes, installierbares Plugin-ZIP für ein GitHub-Release.
+# Baut ein sauberes, installierbares Plugin-ZIP zum Testen / Hochladen.
 #
-# Das ZIP enthält genau einen Ordner «twint-for-woocommerce/» mit allen Plugin-
-# Dateien (ausser den in .gitattributes als export-ignore markierten). Genau dieses
-# Asset lädt der Plugin Update Checker für die 1-Klick-Aktualisierung.
+# Das ZIP enthält genau einen Ordner «blueforce-manual-payments-for-twint/» mit allen
+# Plugin-Dateien (ausser den in .gitattributes als export-ignore markierten). Praktisch
+# zum lokalen Installieren und zum Befüllen des WordPress.org-SVN-Trunks.
 #
 # Verwendung:
 #   ./build.sh            # ZIP aus dem aktuellen HEAD
-#   ./build.sh 1.0.1      # ZIP aus einem bestimmten Tag/Commit
+#   ./build.sh 1.4.0      # ZIP aus einem bestimmten Tag/Commit
 #
 set -euo pipefail
 
-SLUG="twint-for-woocommerce"
+SLUG="blueforce-manual-payments-for-twint"
 REF="${1:-HEAD}"
 OUT="${SLUG}.zip"
 
@@ -40,8 +40,7 @@ require_in_zip() {
 }
 
 echo "Pflicht-Bestandteile:"
-require_in_zip "${SLUG}/${SLUG}.php"                                          "Hauptdatei"
-require_in_zip "${SLUG}/includes/plugin-update-checker/plugin-update-checker.php" "Update-Bibliothek (Loader)"
-require_in_zip "${SLUG}/includes/plugin-update-checker/vendor/Parsedown.php"  "Update-Bibliothek (vendor)"
-require_in_zip "${SLUG}/includes/class-wc-gateway-bf-twint.php"               "Gateway-Klasse"
+require_in_zip "${SLUG}/${SLUG}.php"                           "Hauptdatei"
+require_in_zip "${SLUG}/readme.txt"                            "readme.txt (WordPress.org)"
+require_in_zip "${SLUG}/includes/class-wc-gateway-bf-twint.php" "Gateway-Klasse"
 echo "ZIP ist vollständig."

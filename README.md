@@ -1,4 +1,4 @@
-# TWINT for WooCommerce
+# Blueforce Manual Payments for TWINT
 
 [![Version](https://img.shields.io/github/v/release/blueforce/twint-for-woocommerce?label=Version)](https://github.com/blueforce/twint-for-woocommerce/releases)
 [![License: GPL v2+](https://img.shields.io/badge/License-GPL%20v2%2B-blue.svg)](LICENSE)
@@ -38,10 +38,10 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 - ✅ Klassischer **und** Block-Checkout (Cart/Checkout-Blocks, Store-API)
 - ✅ Optionaler TWINT-QR-Code auf Danke-Seite und in der E-Mail
 - ✅ Anweisungen auf der Danke-Seite, in der Bestell-E-Mail und im Backend
-- ✅ Vollständig übersetzbar (Text-Domain `twint-for-woocommerce`, deutsche Strings)
+- ✅ Vollständig übersetzbar (Text-Domain `blueforce-manual-payments-for-twint`; de, en, fr_CH, it_CH)
 - ✅ Kompatibel mit **HPOS** (High-Performance Order Storage)
-- ✅ **Automatische Updates direkt im WordPress-Backend** (1-Klick, ohne wordpress.org)
-- ✅ Kein Build-Step, keine Tracking-Aufrufe
+- ✅ **Updates direkt im WordPress-Backend** über das offizielle Plugin-Verzeichnis
+- ✅ Kein Build-Step, kein Tracking, keine externen Aufrufe
 
 ## Screenshots
 
@@ -55,23 +55,19 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 
 ## Installation
 
-1. Das **[aktuelle Release-ZIP](https://github.com/blueforce/twint-for-woocommerce/releases/latest)** herunterladen (Datei `twint-for-woocommerce.zip` unter «Assets»).
-2. In WordPress unter **Plugins → Installieren → Plugin hochladen** einspielen und aktivieren.
+**Aus dem WordPress-Verzeichnis (empfohlen):**
+
+1. Im Backend unter **Plugins → Installieren** nach **«Blueforce Manual Payments for TWINT»** suchen.
+2. Installieren und aktivieren.
 3. Unter **WooCommerce → Einstellungen → Zahlungen → TWINT** aktivieren und konfigurieren.
+
+**Manuell (ZIP):** Das ZIP unter **Plugins → Installieren → Plugin hochladen** einspielen und aktivieren.
 
 **Voraussetzungen:** WordPress 6.0+, WooCommerce 7.0+, PHP 7.4+.
 
-> ⚠️ Lade das **Release-Asset** `twint-for-woocommerce.zip` herunter – **nicht** den grünen «Code → Download ZIP»-Button. Der Quellcode-Download enthält einen falsch benannten Ordner und die Update-Bibliothek wird nicht ausgeliefert.
+## Updates
 
-## Automatische Updates
-
-Obwohl das Plugin nicht im wordpress.org-Verzeichnis liegt, erhältst du Updates **direkt im Backend** – wie bei jedem anderen Plugin:
-
-- Sobald ein neues Release (z. B. `1.0.1`) veröffentlicht wird, erscheint unter **Plugins** der Hinweis «Es ist eine neue Version verfügbar».
-- Mit **«Jetzt aktualisieren»** wird die neue Version mit einem Klick installiert.
-- Optional lassen sich unter **Plugins** auch **automatische Updates aktivieren**.
-
-Technisch übernimmt das der eingebettete [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker), der die GitHub-Releases dieses Repos prüft. Dazu ruft deine WordPress-Installation periodisch die **öffentliche GitHub-Releases-API** auf (`api.github.com`) – wie bei jeder Update-Prüfung wird dabei die Server-Anfrage an GitHub übermittelt. Es werden **keine personenbezogenen Kunden- oder Bestelldaten** gesendet. Wer keinen externen Update-Request möchte, kann den Update-Checker per Filter deaktivieren oder das Plugin manuell aktualisieren.
+Das Plugin liegt im **offiziellen WordPress-Plugin-Verzeichnis**. Updates erscheinen damit – wie bei jedem anderen Verzeichnis-Plugin – automatisch unter **Plugins** und lassen sich mit einem Klick oder per Auto-Update installieren. Das Plugin selbst macht **keine externen Aufrufe** und kontaktiert keine fremden Server.
 
 ## Konfiguration
 
