@@ -313,7 +313,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 		?>
 		<tr valign="top">
 			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></label>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo wp_kses_post( $this->get_tooltip_html( $data ) ); ?></label>
 			</th>
 			<td class="forminp">
 				<fieldset>
@@ -321,7 +321,7 @@ class WC_Gateway_BF_TWINT extends WC_Payment_Gateway {
 					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="url" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $value ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" />
 					<button type="button" class="button bf-twint-qr-upload" data-target="<?php echo esc_attr( $field_key ); ?>"><?php esc_html_e( 'Bild auswählen', 'blueforce-manual-payments-for-twint' ); ?></button>
 					<button type="button" class="button bf-twint-qr-remove" data-target="<?php echo esc_attr( $field_key ); ?>" style="<?php echo $value ? '' : 'display:none'; ?>"><?php esc_html_e( 'Entfernen', 'blueforce-manual-payments-for-twint' ); ?></button>
-					<?php echo $this->get_description_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo wp_kses_post( $this->get_description_html( $data ) ); ?>
 					<div class="bf-twint-qr-preview">
 						<?php if ( $value ) : ?>
 							<img src="<?php echo esc_url( $value ); ?>" alt="" />

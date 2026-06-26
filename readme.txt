@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,9 @@ Only in the "I request" workflow: the TWINT mobile number the customer enters at
 In the "I request" workflow the plugin stores the TWINT mobile number provided by the customer as order metadata (`_bf_twint_customer_phone`) in order to request the payment via the TWINT app. This number is included in the WooCommerce/WordPress data export and erasure tools. No data is sent to third parties and no external services are contacted; payment reconciliation is done manually in the TWINT app.
 
 == Changelog ==
+
+= 1.4.1 =
+* Security/hardening: escape settings field output late with wp_kses_post() (tooltip and description HTML in the QR image field); removed the corresponding phpcs:ignore annotations. No functional changes.
 
 = 1.4.0 =
 * Published in the WordPress plugin directory; plugin renamed to "Blueforce Manual Payments for TWINT".
