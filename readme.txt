@@ -1,5 +1,5 @@
 === Blueforce Manual Payments for TWINT ===
-Contributors: blueforce
+Contributors: worshipper
 Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 6.8
