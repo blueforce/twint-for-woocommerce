@@ -111,4 +111,4 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 == Upgrade Notice ==
 
 = 1.4.0 =
-Published in the WordPress plugin directory. Updates now run through WordPress.org; no more external calls. No functional changes.
+Renamed and prepared for the WordPress.org plugin directory; the GitHub-based update mechanism was removed (no more external calls). No functional changes.

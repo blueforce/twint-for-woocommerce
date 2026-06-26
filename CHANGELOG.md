@@ -9,17 +9,37 @@ die Versionierung an [Semantic Versioning](https://semver.org/lang/de/)
 
 _Noch keine unveröffentlichten Änderungen._
 
+## [1.4.2] – 2026-06-26
+
+### Geändert
+- Gateway-Klasse trägt neu den Plugin-Präfix (`BF_TWINT_Gateway`), damit Plugin
+  Check ohne Namens-Warnung durchläuft.
+- Plugin-Header: Beschreibung auf unter 140 Zeichen gekürzt, `Requires Plugins:
+  woocommerce` ergänzt, `WC tested up to` aktualisiert.
+
+### Verpackung
+- `composer.json` liegt neu im verteilten Plugin-ZIP (von WordPress.org erwünscht,
+  auch bei reiner Dev-Nutzung).
+- GitHub-Doku (`README.md`, `CHANGELOG.md`) bleibt aus dem ZIP ausgeschlossen, da
+  ihre Links auf Repo-interne Dateien zeigen.
+
+## [1.4.1] – 2026-06-26
+
+### Sicherheit
+- Settings-Feld-Ausgabe (Tooltip und Beschreibung des QR-Bild-Felds) wird spät mit
+  `wp_kses_post()` escaped; die `phpcs:ignore`-Annotationen sind entfernt.
+
 ## [1.4.0] – 2026-06-26
 
 ### Geändert
-- **Veröffentlichung im WordPress-Plugin-Verzeichnis.** Das Plugin heisst neu
+- **Vorbereitung für das WordPress-Plugin-Verzeichnis.** Das Plugin heisst neu
   «Blueforce Manual Payments for TWINT» (Slug `blueforce-manual-payments-for-twint`).
   Der Name stellt die Herkunft (Blueforce) voran und nennt TWINT nur als
   Kompatibilitätsangabe – konform mit den WordPress.org-Richtlinien zu Markennamen.
 
 ### Entfernt
-- **GitHub-Update-Mechanismus** (Plugin Update Checker). Updates laufen neu
-  ausschliesslich über WordPress.org; das Plugin macht keine externen Aufrufe mehr.
+- **GitHub-Update-Mechanismus** (Plugin Update Checker). Das Plugin macht keine
+  externen Aufrufe mehr; Updates laufen künftig über WordPress.org.
 
 ### Hinweis
 - Keine funktionalen Änderungen an Checkout, Abläufen, Datenschutz oder Einstellungen.

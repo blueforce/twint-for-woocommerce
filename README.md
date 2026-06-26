@@ -40,7 +40,7 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 - ✅ Anweisungen auf der Danke-Seite, in der Bestell-E-Mail und im Backend
 - ✅ Vollständig übersetzbar (Text-Domain `blueforce-manual-payments-for-twint`; de, en, fr_CH, it_CH)
 - ✅ Kompatibel mit **HPOS** (High-Performance Order Storage)
-- ✅ **Updates direkt im WordPress-Backend** über das offizielle Plugin-Verzeichnis
+- ✅ **Updates über das WordPress-Plugin-Verzeichnis** (sobald freigeschaltet)
 - ✅ Kein Build-Step, kein Tracking, keine externen Aufrufe
 
 ## Screenshots
@@ -55,19 +55,17 @@ In beiden Fällen findet **kein automatischer API-Call** statt – der Zahlungse
 
 ## Installation
 
-**Aus dem WordPress-Verzeichnis (empfohlen):**
-
-1. Im Backend unter **Plugins → Installieren** nach **«Blueforce Manual Payments for TWINT»** suchen.
-2. Installieren und aktivieren.
-3. Unter **WooCommerce → Einstellungen → Zahlungen → TWINT** aktivieren und konfigurieren.
-
 **Manuell (ZIP):** Das ZIP unter **Plugins → Installieren → Plugin hochladen** einspielen und aktivieren.
+
+**Aus dem WordPress-Verzeichnis** (sobald freigeschaltet): Im Backend unter **Plugins → Installieren** nach **«Blueforce Manual Payments for TWINT»** suchen, installieren und aktivieren.
+
+Anschliessend unter **WooCommerce → Einstellungen → Zahlungen → TWINT** aktivieren und konfigurieren.
 
 **Voraussetzungen:** WordPress 6.0+, WooCommerce 7.0+, PHP 7.4+.
 
 ## Updates
 
-Das Plugin liegt im **offiziellen WordPress-Plugin-Verzeichnis**. Updates erscheinen damit – wie bei jedem anderen Verzeichnis-Plugin – automatisch unter **Plugins** und lassen sich mit einem Klick oder per Auto-Update installieren. Das Plugin selbst macht **keine externen Aufrufe** und kontaktiert keine fremden Server.
+Sobald das Plugin im **WordPress-Plugin-Verzeichnis** freigeschaltet ist, erscheinen Updates – wie bei jedem anderen Verzeichnis-Plugin – automatisch unter **Plugins** und lassen sich mit einem Klick oder per Auto-Update installieren. Das Plugin selbst macht **keine externen Aufrufe** und kontaktiert keine fremden Server.
 
 ## Konfiguration
 
